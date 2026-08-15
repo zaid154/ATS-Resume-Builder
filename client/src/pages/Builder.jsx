@@ -17,11 +17,26 @@ import {
   Check,
   Loader2,
   Save,
+  ChevronUp,
+  ChevronDown,
+  Sparkles,
+  FileJson,
+  Copy,
+  Upload,
+  ZoomIn,
+  ZoomOut,
+  Eye,
+  Maximize2,
+  X,
 } from "lucide-react";
 import api, { apiError } from "../api/client.js";
 import ResumePreview, { TEMPLATES, ACCENTS } from "../components/templates/index.jsx";
 import Section from "../components/builder/Section.jsx";
 import TagInput from "../components/builder/TagInput.jsx";
+
+import { computeLiveScore } from "../lib/liveScore.js";
+import { PRESETS } from "../lib/presets.js";
+import { scoreColor } from "../lib/score.js";
 
 const BLANK = {
   experience: { company: "", role: "", location: "", startDate: "", endDate: "", current: false, bullets: [""] },
@@ -35,7 +50,14 @@ export default function Builder() {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [saveState, setSaveState] = useState("saved"); // saved | dirty | saving
+  const [showPresets, setShowPresets] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [zoom, setZoom] = useState(0.7);
+  const [fullPreview, setFullPreview] = useState(false);
   const skipSave = useRef(true);
+  const fileInputRef = useRef(null);
+
+
 
   // ---- Load ----
   useEffect(() => {
@@ -82,15 +104,17 @@ export default function Builder() {
   const save = async (snapshot) => {
     setSaveState("saving");
     try {
+      const currentScore = computeLiveScore(snapshot).score;
       // eslint-disable-next-line no-unused-vars
-      const { _id, user, createdAt, updatedAt, __v, lastScore, ...payload } = snapshot;
-      await api.put(`/resumes/${id}`, payload);
+      const { _id, user, createdAt, updatedAt, __v, ...payload } = snapshot;
+      await api.put(`/resumes/${id}`, { ...payload, lastScore: currentScore });
       setSaveState("saved");
     } catch (err) {
       toast.error(apiError(err, "Save failed"));
       setSaveState("dirty");
     }
   };
+
 
   // ---- Update helpers ----
   const patch = (partial) => setData((d) => ({ ...d, ...partial }));
@@ -107,6 +131,18 @@ export default function Builder() {
     setData((d) => ({ ...d, [section]: [...d[section], { ...BLANK[section] }] }));
   const removeItem = (section, index) =>
     setData((d) => ({ ...d, [section]: d[section].filter((_, i) => i !== index) }));
+
+  const moveItem = (section, index, direction) => {
+    setData((d) => {
+      const list = [...d[section]];
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= list.length) return d;
+      const temp = list[index];
+      list[index] = list[targetIndex];
+      list[targetIndex] = temp;
+      return { ...d, [section]: list };
+    });
+  };
 
   const setBullet = (ei, bi, val) =>
     setData((d) => {
@@ -136,6 +172,102 @@ export default function Builder() {
     setTimeout(() => (document.title = prev), 600);
   };
 
+  const exportJSON = () => {
+    if (!data) return;
+    const jsonStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${(data.title || "resume").toLowerCase().replace(/\s+/g, "_")}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("JSON backup exported!");
+  };
+
+  const importJSON = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const parsed = JSON.parse(event.target.result);
+        if (parsed.personal || parsed.experience || parsed.skills) {
+          patch({
+            title: parsed.title || data.title,
+            template: parsed.template || data.template,
+            accent: parsed.accent || data.accent,
+            personal: { ...data.personal, ...parsed.personal },
+            experience: parsed.experience || data.experience,
+            education: parsed.education || data.education,
+            projects: parsed.projects || data.projects,
+            certifications: parsed.certifications || data.certifications,
+            skills: parsed.skills || data.skills,
+            languages: parsed.languages || data.languages,
+          });
+          toast.success("Resume data imported!");
+        } else {
+          toast.error("Invalid resume JSON structure");
+        }
+      } catch (err) {
+        toast.error("Could not parse JSON file");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
+  const copyPlainText = () => {
+    if (!data) return;
+    const p = data.personal || {};
+    let text = `${p.fullName || "Resume"}\n`;
+    if (p.jobTitle) text += `${p.jobTitle}\n`;
+    const contacts = [p.email, p.phone, p.location, p.linkedin, p.github, p.website].filter(
+      Boolean
+    );
+    if (contacts.length) text += `${contacts.join(" | ")}\n`;
+    if (p.summary) text += `\nSUMMARY:\n${p.summary}\n`;
+
+    if (data.experience?.length) {
+      text += `\nEXPERIENCE:\n`;
+      data.experience.forEach((e) => {
+        text += `${e.role || "Role"} - ${e.company || "Company"} (${e.startDate || ""} ${
+          e.current ? "Present" : e.endDate || ""
+        })\n`;
+        if (e.location) text += `${e.location}\n`;
+        (e.bullets || []).forEach((b) => {
+          if (b.trim()) text += `• ${b}\n`;
+        });
+        text += `\n`;
+      });
+    }
+
+    if (data.education?.length) {
+      text += `EDUCATION:\n`;
+      data.education.forEach((e) => {
+        text += `${e.degree || "Degree"} in ${e.field || "Field"} - ${e.school || ""}\n`;
+      });
+      text += `\n`;
+    }
+
+    if (data.skills?.length) {
+      text += `SKILLS:\n${data.skills.join(", ")}\n`;
+    }
+
+    navigator.clipboard.writeText(text);
+    toast.success("Plain text resume copied to clipboard!");
+  };
+
+  const loadPreset = (presetData) => {
+    if (window.confirm("Replace current content with this sample preset?")) {
+      patch(presetData);
+      toast.success("Preset loaded!");
+      setShowPresets(false);
+    }
+  };
+
+  const liveStats = data ? computeLiveScore(data) : { score: 0, label: "Empty" };
+
   if (!data) {
     return (
       <div className="app-loader">
@@ -145,17 +277,26 @@ export default function Builder() {
   }
 
   return (
-    <>
+    <div className="builder-workspace">
       <div className="builder-toolbar">
         <button className="btn btn-ghost btn-sm" onClick={() => navigate("/dashboard")}>
           <ArrowLeft size={16} />
         </button>
+
         <input
           className="title-input"
           value={data.title}
           onChange={(e) => patch({ title: e.target.value })}
           placeholder="Resume title"
         />
+
+        <div className="live-score-pill" style={{ borderColor: scoreColor(liveStats.score) }}>
+          <span className="dot" style={{ background: scoreColor(liveStats.score) }} />
+          <span>ATS Strength:</span>
+          <strong style={{ color: scoreColor(liveStats.score) }}>{liveStats.score}/100</strong>
+          <small>({liveStats.label})</small>
+        </div>
+
         <span className={`save-state ${saveState}`}>
           {saveState === "saving" ? (
             <>
@@ -169,21 +310,96 @@ export default function Builder() {
             </>
           )}
         </span>
+
         <div className="toolbar-spacer" />
-        <button className="btn btn-ghost btn-sm" onClick={() => save(data)}>
-          <Save size={16} /> Save
-        </button>
-        <Link className="btn btn-ghost btn-sm" to={`/analyze/${id}`}>
-          <Target size={16} /> Analyze
-        </Link>
-        <button className="btn btn-primary btn-sm" onClick={exportPDF}>
-          <Download size={16} /> Download PDF
-        </button>
+
+        {/* Action controls */}
+        <div className="builder-toolbar-actions">
+          <button
+            className="btn btn-ghost btn-sm"
+            onClick={() => setShowPresets(!showPresets)}
+            title="Load sample resume preset"
+          >
+            <Sparkles size={15} /> Presets
+          </button>
+
+          <Link className="btn btn-ghost btn-sm" to={`/analyze/${id}`}>
+            <Target size={15} /> Analyze
+          </Link>
+
+          <div className="more-menu-wrapper">
+            <button
+              className="btn btn-ghost btn-sm"
+              onClick={() => setShowMoreMenu(!showMoreMenu)}
+            >
+              Tools <ChevronDown size={14} />
+            </button>
+            {showMoreMenu && (
+              <div className="more-menu-popover" onClick={() => setShowMoreMenu(false)}>
+                <button className="more-menu-item" onClick={exportJSON}>
+                  <FileJson size={14} /> Backup JSON
+                </button>
+                <button className="more-menu-item" onClick={() => fileInputRef.current?.click()}>
+                  <Upload size={14} /> Import JSON
+                </button>
+                <button className="more-menu-item" onClick={copyPlainText}>
+                  <Copy size={14} /> Copy Plain Text
+                </button>
+                <button className="more-menu-item" onClick={() => save(data)}>
+                  <Save size={14} /> Save Snapshot
+                </button>
+              </div>
+            )}
+          </div>
+          <input
+            type="file"
+            accept=".json"
+            ref={fileInputRef}
+            onChange={importJSON}
+            style={{ display: "none" }}
+          />
+
+          <button className="btn btn-primary btn-sm" onClick={exportPDF}>
+            <Download size={15} /> Download PDF
+          </button>
+        </div>
       </div>
 
-      <div className="builder">
+      {/* Preset Modal Selector */}
+      {showPresets && (
+        <div className="preset-modal-backdrop" onClick={() => setShowPresets(false)}>
+          <div className="preset-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>
+              <Sparkles size={18} style={{ verticalAlign: "-3px", color: "var(--primary)" }} /> Choose a Sample Preset
+            </h3>
+            <p className="rc-sub">
+              Load a pre-filled, highly ATS-optimized template to quickly test or build your resume.
+            </p>
+            <div className="preset-list">
+              {PRESETS.map((p) => (
+                <div className="preset-card" key={p.id} onClick={() => loadPreset(p.data)}>
+                  <h4>{p.name}</h4>
+                  <p>{p.data.personal.summary.slice(0, 100)}…</p>
+                  <div className="preset-tags">
+                    {p.data.skills.slice(0, 5).map((s) => (
+                      <span className="tag" key={s}>
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className="btn btn-ghost btn-block" onClick={() => setShowPresets(false)}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="builder-body">
         {/* ---------------- Editor ---------------- */}
-        <div className="editor-panel">
+        <div className="editor-scroll-panel">
           {/* Personal */}
           <Section icon={User} title="Personal details">
             <div className="grid-2">
@@ -277,9 +493,27 @@ export default function Builder() {
               <div className="item-block" key={i}>
                 <div className="item-head">
                   <span>Experience {i + 1}</span>
-                  <button className="icon-btn" onClick={() => removeItem("experience", i)}>
-                    <Trash2 size={15} />
-                  </button>
+                  <div className="row" style={{ gap: 4 }}>
+                    <button
+                      className="icon-btn"
+                      onClick={() => moveItem("experience", i, -1)}
+                      disabled={i === 0}
+                      title="Move up"
+                    >
+                      <ChevronUp size={15} />
+                    </button>
+                    <button
+                      className="icon-btn"
+                      onClick={() => moveItem("experience", i, 1)}
+                      disabled={i === data.experience.length - 1}
+                      title="Move down"
+                    >
+                      <ChevronDown size={15} />
+                    </button>
+                    <button className="icon-btn" onClick={() => removeItem("experience", i)} title="Remove">
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 </div>
                 <div className="grid-2">
                   <div className="field">
@@ -366,9 +600,25 @@ export default function Builder() {
               <div className="item-block" key={i}>
                 <div className="item-head">
                   <span>Education {i + 1}</span>
-                  <button className="icon-btn" onClick={() => removeItem("education", i)}>
-                    <Trash2 size={15} />
-                  </button>
+                  <div className="row" style={{ gap: 4 }}>
+                    <button
+                      className="icon-btn"
+                      onClick={() => moveItem("education", i, -1)}
+                      disabled={i === 0}
+                    >
+                      <ChevronUp size={15} />
+                    </button>
+                    <button
+                      className="icon-btn"
+                      onClick={() => moveItem("education", i, 1)}
+                      disabled={i === data.education.length - 1}
+                    >
+                      <ChevronDown size={15} />
+                    </button>
+                    <button className="icon-btn" onClick={() => removeItem("education", i)}>
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 </div>
                 <div className="grid-2">
                   <div className="field">
@@ -442,9 +692,25 @@ export default function Builder() {
               <div className="item-block" key={i}>
                 <div className="item-head">
                   <span>Project {i + 1}</span>
-                  <button className="icon-btn" onClick={() => removeItem("projects", i)}>
-                    <Trash2 size={15} />
-                  </button>
+                  <div className="row" style={{ gap: 4 }}>
+                    <button
+                      className="icon-btn"
+                      onClick={() => moveItem("projects", i, -1)}
+                      disabled={i === 0}
+                    >
+                      <ChevronUp size={15} />
+                    </button>
+                    <button
+                      className="icon-btn"
+                      onClick={() => moveItem("projects", i, 1)}
+                      disabled={i === data.projects.length - 1}
+                    >
+                      <ChevronDown size={15} />
+                    </button>
+                    <button className="icon-btn" onClick={() => removeItem("projects", i)}>
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 </div>
                 <div className="field">
                   <label>Name</label>
@@ -490,9 +756,25 @@ export default function Builder() {
               <div className="item-block" key={i}>
                 <div className="item-head">
                   <span>Certification {i + 1}</span>
-                  <button className="icon-btn" onClick={() => removeItem("certifications", i)}>
-                    <Trash2 size={15} />
-                  </button>
+                  <div className="row" style={{ gap: 4 }}>
+                    <button
+                      className="icon-btn"
+                      onClick={() => moveItem("certifications", i, -1)}
+                      disabled={i === 0}
+                    >
+                      <ChevronUp size={15} />
+                    </button>
+                    <button
+                      className="icon-btn"
+                      onClick={() => moveItem("certifications", i, 1)}
+                      disabled={i === data.certifications.length - 1}
+                    >
+                      <ChevronDown size={15} />
+                    </button>
+                    <button className="icon-btn" onClick={() => removeItem("certifications", i)}>
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 </div>
                 <div className="grid-2">
                   <div className="field">
@@ -564,17 +846,142 @@ export default function Builder() {
                   onClick={() => patch({ accent: c })}
                 />
               ))}
+              <label
+                className="accent-dot custom-color-picker"
+                title="Custom color"
+                style={{ background: data.accent || "#2563eb", display: "inline-grid", placeItems: "center" }}
+              >
+                <input
+                  type="color"
+                  value={data.accent || "#2563eb"}
+                  onChange={(e) => patch({ accent: e.target.value })}
+                  style={{ opacity: 0, width: 0, height: 0, cursor: "pointer" }}
+                />
+                <span style={{ color: "#fff", fontSize: "10px", fontWeight: "bold" }}>+</span>
+              </label>
             </div>
           </Section>
         </div>
 
         {/* ---------------- Preview ---------------- */}
-        <div className="preview-panel">
+        <div className="preview-sticky-panel">
+          <div className="preview-controls">
+            <div className="row" style={{ gap: 8 }}>
+              <span className="pv-label">
+                <Eye size={14} /> Live Canvas
+              </span>
+              <select
+                className="select-template-quick"
+                value={data.template || "modern"}
+                onChange={(e) => patch({ template: e.target.value })}
+                title="Quick Template Switcher"
+              >
+                {TEMPLATES.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    🎨 {t.name}
+                  </option>
+                ))}
+              </select>
+              <span
+                style={{
+                  color: "#16a34a",
+                  fontSize: "0.72rem",
+                  background: "#f0fdf4",
+                  border: "1px solid #bbf7d0",
+                  padding: "2px 8px",
+                  borderRadius: 12,
+                  fontWeight: 700,
+                  display: "inline-flex",
+                  alignItems: "center",
+                }}
+              >
+                📄 1 Page A4 Standard
+              </span>
+            </div>
+
+
+            <div className="row" style={{ gap: 4 }}>
+              <button
+                className="btn btn-ghost btn-sm"
+                style={{ padding: "3px 7px" }}
+                onClick={() => setZoom((z) => Math.max(0.4, z - 0.08))}
+                title="Zoom out"
+              >
+                <ZoomOut size={13} />
+              </button>
+              <span className="zoom-val">{Math.round(zoom * 100)}%</span>
+              <button
+                className="btn btn-ghost btn-sm"
+                style={{ padding: "3px 7px" }}
+                onClick={() => setZoom((z) => Math.min(1.2, z + 0.08))}
+                title="Zoom in"
+              >
+                <ZoomIn size={13} />
+              </button>
+              <button
+                className="btn btn-ghost btn-sm"
+                style={{ padding: "3px 8px", fontSize: "0.75rem" }}
+                onClick={() => setZoom(0.7)}
+                title="Fit to screen"
+              >
+                Fit
+              </button>
+              <button
+                className="btn btn-ghost btn-sm"
+                style={{ padding: "3px 7px" }}
+                onClick={() => setFullPreview(true)}
+                title="Full screen view"
+              >
+                <Maximize2 size={13} />
+              </button>
+            </div>
+          </div>
+
           <div className="preview-frame">
-            <ResumePreview data={data} />
+            <div
+              className="preview-scaler-wrapper"
+              style={{
+                width: `${Math.round(780 * zoom)}px`,
+                height: `${Math.round(1040 * zoom)}px`,
+                position: "relative",
+                flexShrink: 0,
+              }}
+            >
+              <div
+                className="preview-scaler-inner"
+                style={{
+                  width: "780px",
+                  transformOrigin: "top left",
+                  transform: `scale(${zoom})`,
+                  boxShadow: "0 10px 30px rgba(0, 0, 0, 0.15)",
+                }}
+              >
+                <ResumePreview data={data} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </>
+
+      {/* Fullscreen Preview Modal */}
+      {fullPreview && (
+        <div className="fullscreen-modal-backdrop" onClick={() => setFullPreview(false)}>
+          <div className="fullscreen-modal-head" onClick={(e) => e.stopPropagation()}>
+            <span className="row" style={{ gap: 8, fontSize: "1.1rem", fontWeight: 700 }}>
+              <Eye size={18} /> Fullscreen Resume Canvas
+            </span>
+            <button className="btn btn-ghost btn-sm" onClick={() => setFullPreview(false)}>
+              <X size={18} /> Close
+            </button>
+          </div>
+          <div className="fullscreen-modal-body" onClick={(e) => e.stopPropagation()}>
+            <ResumePreview data={data} />
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
+
+
+

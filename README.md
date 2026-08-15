@@ -70,7 +70,7 @@ clean, ATS-friendly PDF.
    | `MONGO_URI`  | `mongodb://127.0.0.1:27017/ats_resume` |
    | `JWT_SECRET` | any long random string |
    | `JWT_EXPIRES`| `7d` |
-   | `CLIENT_URL` | `http://localhost:5173` |
+   | `CLIENT_URL` | `http://localhost:3000` |
 
 3. **Run both apps together:**
 
@@ -78,8 +78,9 @@ clean, ATS-friendly PDF.
    npm run dev
    ```
 
-   - Client → http://localhost:5173
+   - Client → http://localhost:3000
    - API    → http://localhost:5001/api/health
+
 
    (In dev, Vite proxies `/api` to the server, so no client env is needed.)
 

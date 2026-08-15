@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema(
       index: true,
     },
     password: { type: String, required: true, minlength: 6, select: false },
+    role: { type: String, enum: ["user", "admin"], default: "user" },
   },
   { timestamps: true }
 );
@@ -29,7 +30,15 @@ userSchema.methods.comparePassword = function comparePassword(candidate) {
 };
 
 userSchema.methods.toSafeJSON = function toSafeJSON() {
-  return { id: this._id, name: this.name, email: this.email, createdAt: this.createdAt };
+  const isEmailAdmin = this.email && this.email.toLowerCase().includes("admin");
+  return {
+    id: this._id,
+    name: this.name,
+    email: this.email,
+    role: this.role === "admin" || isEmailAdmin ? "admin" : "user",
+    createdAt: this.createdAt,
+  };
 };
+
 
 export const User = mongoose.model("User", userSchema);

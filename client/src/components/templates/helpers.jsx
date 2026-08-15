@@ -26,3 +26,28 @@ export function Bullets({ items }) {
     </ul>
   );
 }
+
+export function EmptyDocGuide() {
+  return (
+    <div
+      className="rd-empty-guide"
+      style={{
+        padding: "50px 24px",
+        textAlign: "center",
+        color: "#64748b",
+        border: "2px dashed #cbd5e1",
+        borderRadius: "12px",
+        marginTop: "24px",
+        background: "#f8fafc",
+      }}
+    >
+      <h3 style={{ fontSize: "17px", color: "#334155", marginBottom: "8px", fontWeight: "700" }}>
+        Live Resume Preview Canvas
+      </h3>
+      <p style={{ fontSize: "13px", color: "#64748b", maxWidth: "42ch", margin: "0 auto" }}>
+        Fill out your personal info, experience, education, and skills in the left editor panel (or click <strong>Presets</strong>) to watch your resume build in real time.
+      </p>
+    </div>
+  );
+}
+

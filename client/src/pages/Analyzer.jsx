@@ -2,19 +2,40 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
-import { Target, Sparkles, Check, X, Lightbulb, ArrowLeft, Pencil } from "lucide-react";
+import { Target, Sparkles, Check, X, Lightbulb, ArrowLeft, Pencil, Copy, AlertTriangle } from "lucide-react";
 import api, { apiError } from "../api/client.js";
 import ScoreRing from "../components/ScoreRing.jsx";
 import { scoreColor } from "../lib/score.js";
 
-const SAMPLE = `We're hiring a Full-Stack Developer to build and scale web apps.
-
+const SAMPLE_JDS = [
+  {
+    label: "Full-Stack Engineer",
+    text: `We are seeking a Senior Full-Stack Developer to build and scale modern web applications.
 Requirements:
-- Strong JavaScript, React and Node.js
-- Experience with REST APIs, MongoDB and Express
-- Familiarity with Git, CI/CD and cloud deployment (AWS)
-- Bonus: TypeScript, Docker, testing (Jest)
-You will collaborate with designers, ship features and optimize performance.`;
+- Strong experience with JavaScript, React.js, Node.js, and Express.js
+- Proficiency in database design with MongoDB, PostgreSQL, and REST API architecture
+- Familiarity with CI/CD, Git, Docker, System Design, and Cloud Services (AWS / GCP)
+- Experience writing unit tests with Jest and optimizing performance
+Responsibilities: Collaborate with cross-functional teams, ship clean code, and optimize scalable backends.`,
+  },
+  {
+    label: "Data Scientist",
+    text: `Looking for a Senior Data Scientist to design predictive machine learning models and NLP pipelines.
+Requirements:
+- Proficient in Python, SQL, PyTorch, TensorFlow, and Pandas
+- Experience with Machine Learning algorithms, Data Science, and ETL pipelines
+- Knowledge of Snowflake, Big Data processing, and Tableau data visualization
+- Strong background in statistics and predictive modeling.`,
+  },
+  {
+    label: "Product Manager",
+    text: `Hiring a Product Manager to lead SaaS feature roadmap execution.
+Requirements:
+- 3+ years experience in SaaS Product Management, Agile & Scrum methodologies
+- Strong skills in User Research, A/B Testing, Mixpanel, and Customer Discovery
+- Ability to define wireframing requirements in Figma and prioritize backlog items in Jira.`,
+  },
+];
 
 export default function Analyzer() {
   const { id } = useParams();
@@ -48,6 +69,11 @@ export default function Analyzer() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const copyKeyword = (kw) => {
+    navigator.clipboard.writeText(kw);
+    toast.success(`Copied "${kw}" to clipboard!`);
   };
 
   return (
@@ -91,15 +117,20 @@ export default function Analyzer() {
             </div>
 
             <div className="field">
-              <div className="row" style={{ justifyContent: "space-between" }}>
+              <div className="row" style={{ justifyContent: "space-between", marginBottom: 6 }}>
                 <label style={{ marginBottom: 0 }}>Job description</label>
-                <button
-                  className="btn btn-ghost btn-sm"
-                  onClick={() => setJd(SAMPLE)}
-                  type="button"
-                >
-                  Use sample
-                </button>
+                <div className="row" style={{ gap: 4 }}>
+                  {SAMPLE_JDS.map((s, idx) => (
+                    <button
+                      key={idx}
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => setJd(s.text)}
+                      type="button"
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
               </div>
               <textarea
                 className="textarea"
@@ -169,7 +200,7 @@ export default function Analyzer() {
                   <div className="breakdown-row" key={b.key}>
                     <div className="br-head">
                       <span>{b.label}</span>
-                      <span style={{ color: scoreColor(b.score) }}>{b.score}</span>
+                      <span style={{ color: scoreColor(b.score) }}>{b.score}%</span>
                     </div>
                     <div className="br-bar">
                       <div
@@ -183,7 +214,48 @@ export default function Analyzer() {
 
                 {/* Keywords */}
                 <h4 className="section-title" style={{ marginTop: 22 }}>
-                  Matched keywords
+                  Matched keywords ({result.matchedKeywords.length})
+                </h4>
+                {result.matchedKeywords.length ? (
+                  <div className="keyword-cloud">
+                    {result.matchedKeywords.map((k) => (
+                      <span className="kw kw-match" key={k}>
+                        <Check size={12} /> {k}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="br-tip">No overlap yet — add relevant keywords below.</p>
+                )}
+
+                {/* Critical Missing Skills Warning */}
+                {result.criticalMissing?.length > 0 && (
+                  <div className="weak-bullets-box" style={{ marginTop: 20, background: "#fef2f2", borderColor: "#fecaca" }}>
+                    <h4 className="section-title" style={{ color: "#dc2626" }}>
+                      <AlertTriangle size={14} style={{ verticalAlign: "-2px" }} /> Critical Missing Requirements ({result.criticalMissing.length})
+                    </h4>
+                    <p className="br-tip" style={{ marginBottom: 8, color: "#991b1b" }}>
+                      These skills are explicitly listed as required in the job posting:
+                    </p>
+                    <div className="keyword-cloud">
+                      {result.criticalMissing.map((k) => (
+                        <span
+                          className="kw kw-miss clickable-kw"
+                          key={k}
+                          onClick={() => copyKeyword(k)}
+                          title="Click to copy keyword"
+                          style={{ background: "#fee2e2", borderColor: "#fca5a5", color: "#991b1b" }}
+                        >
+                          <X size={12} /> {k} <Copy size={11} style={{ marginLeft: 2 }} />
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Keywords */}
+                <h4 className="section-title" style={{ marginTop: 22 }}>
+                  Matched keywords ({result.matchedKeywords.length})
                 </h4>
                 {result.matchedKeywords.length ? (
                   <div className="keyword-cloud">
@@ -198,23 +270,76 @@ export default function Analyzer() {
                 )}
 
                 <h4 className="section-title" style={{ marginTop: 18 }}>
-                  Missing keywords
+                  Missing keywords ({result.missingKeywords.length}) <small style={{ textTransform: "none", fontWeight: "normal" }}>(Click to copy)</small>
                 </h4>
                 {result.missingKeywords.length ? (
                   <div className="keyword-cloud">
                     {result.missingKeywords.map((k) => (
-                      <span className="kw kw-miss" key={k}>
-                        <X size={12} /> {k}
+                      <span
+                        className="kw kw-miss clickable-kw"
+                        key={k}
+                        onClick={() => copyKeyword(k)}
+                        title="Click to copy keyword"
+                      >
+                        <X size={12} /> {k} <Copy size={11} style={{ marginLeft: 2 }} />
                       </span>
                     ))}
                   </div>
                 ) : (
-                  <p className="br-tip">Great — you covered the important terms.</p>
+                  <p className="br-tip">Great — you covered the key terms.</p>
+                )}
+
+                {/* Weak Bullets Warning */}
+                {result.weakBullets?.length > 0 && (
+                  <div className="weak-bullets-box" style={{ marginTop: 20 }}>
+                    <h4 className="section-title" style={{ color: "#d97706" }}>
+                      <AlertTriangle size={14} style={{ verticalAlign: "-2px" }} /> Weak Achievement Bullets
+                    </h4>
+                    <p className="br-tip" style={{ marginBottom: 8 }}>
+                      These bullets don't start with strong action verbs (Led, Built, Engineered, Reduced):
+                    </p>
+                    <ul className="weak-bullets-list">
+                      {result.weakBullets.map((wb, idx) => (
+                        <li key={idx}>"{wb}"</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Strengths & Weaknesses */}
+                {((result.strengths && result.strengths.length > 0) || (result.weaknesses && result.weaknesses.length > 0)) && (
+                  <div className="grid-2" style={{ marginTop: 22 }}>
+                    {result.strengths?.length > 0 && (
+                      <div className="card-pad" style={{ padding: 14, background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 8 }}>
+                        <h4 className="section-title" style={{ color: "#16a34a", marginBottom: 6 }}>
+                          <Check size={14} style={{ verticalAlign: "-2px" }} /> Key Strengths
+                        </h4>
+                        <ul style={{ paddingLeft: 16, margin: 0, fontSize: "0.82rem", color: "#15803d" }}>
+                          {result.strengths.map((st, i) => (
+                            <li key={i}>{st}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {result.weaknesses?.length > 0 && (
+                      <div className="card-pad" style={{ padding: 14, background: "#fffbeb", border: "1px solid #fef3c7", borderRadius: 8 }}>
+                        <h4 className="section-title" style={{ color: "#d97706", marginBottom: 6 }}>
+                          <AlertTriangle size={14} style={{ verticalAlign: "-2px" }} /> Key Gaps
+                        </h4>
+                        <ul style={{ paddingLeft: 16, margin: 0, fontSize: "0.82rem", color: "#b45309" }}>
+                          {result.weaknesses.map((wk, i) => (
+                            <li key={i}>{wk}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 )}
 
                 {/* Suggestions */}
                 <h4 className="section-title" style={{ marginTop: 22 }}>
-                  <Lightbulb size={14} style={{ verticalAlign: "-2px" }} /> Suggestions
+                  <Lightbulb size={14} style={{ verticalAlign: "-2px" }} /> Actionable Suggestions
                 </h4>
                 {result.suggestions.map((s, i) => (
                   <div className="suggestion" key={i}>
@@ -222,6 +347,7 @@ export default function Analyzer() {
                     <span>{s.text}</span>
                   </div>
                 ))}
+
               </motion.div>
             )}
           </div>
@@ -230,3 +356,4 @@ export default function Analyzer() {
     </div>
   );
 }
+

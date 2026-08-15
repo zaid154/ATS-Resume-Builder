@@ -55,19 +55,20 @@ const personalSchema = z.object({
   summary: z.string().default(""),
 });
 
-// Everything except the user is optional so autosave/partial updates work.
 export const resumeSchema = z.object({
-  title: z.string().trim().max(120).default("Untitled Resume"),
-  template: z.enum(["modern", "classic", "minimal", "elegant"]).default("modern"),
-  accent: z.string().default("#2563eb"),
-  personal: personalSchema.default({}),
-  experience: z.array(experienceSchema).default([]),
-  education: z.array(educationSchema).default([]),
-  projects: z.array(projectSchema).default([]),
-  certifications: z.array(certificationSchema).default([]),
-  skills: z.array(z.string()).default([]),
-  languages: z.array(z.string()).default([]),
-}).partial();
+  title: z.string().trim().max(120).optional().default("Untitled Resume"),
+  template: z.string().optional().default("modern"),
+  accent: z.string().optional().default("#2563eb"),
+  personal: z.any().optional(),
+  experience: z.any().optional(),
+  education: z.any().optional(),
+  projects: z.any().optional(),
+  certifications: z.any().optional(),
+  skills: z.any().optional(),
+  languages: z.any().optional(),
+  lastScore: z.any().optional(),
+}).passthrough();
+
 
 export const analyzeSchema = z.object({
   resumeId: z.string().optional(),

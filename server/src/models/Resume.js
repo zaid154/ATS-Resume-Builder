@@ -50,9 +50,10 @@ const resumeSchema = new mongoose.Schema(
     title: { type: String, default: "Untitled Resume", trim: true },
     template: {
       type: String,
-      enum: ["modern", "classic", "minimal", "elegant"],
       default: "modern",
     },
+
+
     accent: { type: String, default: "#2563eb" },
     personal: {
       fullName: { type: String, default: "" },

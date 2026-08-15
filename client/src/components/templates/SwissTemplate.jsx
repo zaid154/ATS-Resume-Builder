@@ -1,6 +1,6 @@
 import { dateRange, contactList, hasArr, Bullets, EmptyDocGuide } from "./helpers.jsx";
 
-export default function ClassicTemplate({ data }) {
+export default function SwissTemplate({ data }) {
   const p = data.personal || {};
   const contacts = contactList(p);
 
@@ -9,12 +9,10 @@ export default function ClassicTemplate({ data }) {
     !hasArr(data.experience) &&
     !hasArr(data.projects) &&
     !hasArr(data.education) &&
-    !hasArr(data.skills) &&
-    !hasArr(data.certifications) &&
-    !hasArr(data.languages);
+    !hasArr(data.skills);
 
   return (
-    <div className="resume-doc tpl-classic">
+    <div className="resume-doc tpl-swiss">
       <header className="rd-header">
         <h1 className="rd-name">{p.fullName || "Your Name"}</h1>
         {p.jobTitle && <div className="rd-title">{p.jobTitle}</div>}
@@ -33,7 +31,7 @@ export default function ClassicTemplate({ data }) {
         <>
           {p.summary && (
             <section className="rd-section">
-              <h2 className="rd-section-title">Professional Summary</h2>
+              <h2 className="rd-section-title">Overview</h2>
               <p>{p.summary}</p>
             </section>
           )}
@@ -44,12 +42,10 @@ export default function ClassicTemplate({ data }) {
               {data.experience.map((e, i) => (
                 <div className="rd-item" key={i}>
                   <div className="rd-item-head">
-                    <span className="rd-role">{e.role || "Role"}</span>
+                    <span className="rd-role">
+                      {e.role || "Role"} {e.company && <span className="rd-org">— {e.company}</span>}
+                    </span>
                     <span className="rd-meta">{dateRange(e.startDate, e.endDate, e.current)}</span>
-                  </div>
-                  <div className="rd-org">
-                    {e.company}
-                    {e.location ? `, ${e.location}` : ""}
                   </div>
                   <Bullets items={e.bullets} />
                 </div>
@@ -69,23 +65,7 @@ export default function ClassicTemplate({ data }) {
                     </span>
                     <span className="rd-meta">{dateRange(e.startDate, e.endDate)}</span>
                   </div>
-                  <div className="rd-org">
-                    {e.school}
-                    {e.grade ? ` · ${e.grade}` : ""}
-                  </div>
-                </div>
-              ))}
-            </section>
-          )}
-
-          {hasArr(data.projects) && (
-            <section className="rd-section">
-              <h2 className="rd-section-title">Projects</h2>
-              {data.projects.map((pr, i) => (
-                <div className="rd-item" key={i}>
-                  <span className="rd-role">{pr.name || "Project"}</span>
-                  {pr.description && <p>{pr.description}</p>}
-                  {hasArr(pr.tech) && <div className="rd-meta">{pr.tech.join(", ")}</div>}
+                  <div className="rd-org">{e.school}</div>
                 </div>
               ))}
             </section>
@@ -103,29 +83,8 @@ export default function ClassicTemplate({ data }) {
               </div>
             </section>
           )}
-
-          {(hasArr(data.certifications) || hasArr(data.languages)) && (
-            <section className="rd-section">
-              <h2 className="rd-section-title">Additional</h2>
-              {hasArr(data.certifications) && (
-                <p>
-                  <strong>Certifications: </strong>
-                  {data.certifications
-                    .map((c) => [c.name, c.issuer].filter(Boolean).join(" — "))
-                    .join(" · ")}
-                </p>
-              )}
-              {hasArr(data.languages) && (
-                <p>
-                  <strong>Languages: </strong>
-                  {data.languages.join(", ")}
-                </p>
-              )}
-            </section>
-          )}
         </>
       )}
     </div>
   );
 }
-

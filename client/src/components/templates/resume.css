@@ -1,14 +1,51 @@
 /* ============ Resume document (shared) ============ */
 .resume-doc {
+  position: relative;
   width: 780px;
-  min-height: 1040px;
+  min-height: var(--doc-min-height, 1040px);
   background: #fff;
   color: #1f2937;
   box-shadow: 0 10px 40px rgba(15, 23, 42, 0.18);
   font-family: "Inter", "Segoe UI", system-ui, sans-serif;
   font-size: 13px;
   line-height: 1.5;
+  text-align: left;
 }
+
+
+/* A4 Visual Page Cutoff Marker */
+.a4-page-break-line {
+  position: absolute;
+  top: 1040px;
+  left: 0;
+  right: 0;
+  border-top: 2px dashed #ef4444;
+  height: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.a4-page-break-line::after {
+  content: "✂ PAGE 1 END (A4 CUTOFF)";
+  position: absolute;
+  top: -10px;
+  right: 16px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.06em;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+@media print {
+  .a4-page-break-line {
+    display: none !important;
+  }
+}
+
 .resume-doc h1,
 .resume-doc h2,
 .resume-doc h3,
@@ -87,13 +124,8 @@
   border-radius: 5px;
   background: #eef2f7;
 }
-.rd-empty-hint {
-  color: #9ca3af;
-  font-style: italic;
-  font-size: 12px;
-}
 
-/* ---------- Modern ---------- */
+/* 1. Modern */
 .tpl-modern {
   padding: 40px 44px;
 }
@@ -119,7 +151,7 @@
   color: var(--accent);
 }
 
-/* ---------- Classic ---------- */
+/* 2. Classic */
 .tpl-classic {
   padding: 44px 48px;
   font-family: "Georgia", "Times New Roman", serif;
@@ -155,7 +187,7 @@
   content: "";
 }
 
-/* ---------- Minimal ---------- */
+/* 3. Minimal */
 .tpl-minimal {
   padding: 46px 50px;
 }
@@ -178,7 +210,7 @@
   background: #f3f4f6;
 }
 
-/* ---------- Elegant (two column) ---------- */
+/* 4. Elegant (two column) */
 .tpl-elegant {
   display: grid;
   grid-template-columns: 250px 1fr;
@@ -220,8 +252,281 @@
   margin-bottom: 10px;
 }
 
-/* ============ Print / PDF export ============
-   Only the resume document prints — text stays selectable (ATS-friendly). */
+/* 5. Tech */
+.tpl-tech {
+  padding: 38px 42px;
+}
+.tpl-tech .rd-header {
+  border-left: 4px solid var(--accent);
+  padding-left: 16px;
+  margin-bottom: 20px;
+}
+.tpl-tech .rd-name {
+  color: var(--accent);
+  font-family: monospace, sans-serif;
+}
+.tpl-tech .rd-section {
+  margin-bottom: 16px;
+}
+.tpl-tech .rd-section-title {
+  color: var(--accent);
+  border-bottom: 2px dashed #cbd5e1;
+  padding-bottom: 3px;
+  margin-bottom: 10px;
+}
+.tpl-tech .rd-skill {
+  font-family: monospace;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+/* 6. Corporate */
+.tpl-corporate {
+  padding: 40px 44px;
+}
+.tpl-corporate .rd-header {
+  background: var(--accent);
+  color: #ffffff;
+  padding: 24px;
+  margin: -40px -44px 20px;
+}
+.tpl-corporate .rd-header .rd-name,
+.tpl-corporate .rd-header .rd-title {
+  color: #ffffff;
+}
+.tpl-corporate .rd-section {
+  margin-bottom: 18px;
+}
+.tpl-corporate .rd-section-title {
+  background: #f1f5f9;
+  color: var(--accent);
+  padding: 4px 10px;
+  border-left: 4px solid var(--accent);
+  margin-bottom: 12px;
+}
+
+/* 7. Compact */
+.tpl-compact {
+  padding: 28px 32px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.tpl-compact .rd-header {
+  border-bottom: 1px solid #94a3b8;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.tpl-compact .rd-name {
+  font-size: 22px;
+}
+.tpl-compact .rd-section {
+  margin-bottom: 12px;
+}
+.tpl-compact .rd-section-title {
+  font-size: 11.5px;
+  color: var(--accent);
+  border-bottom: 1px solid #cbd5e1;
+  margin-bottom: 6px;
+}
+
+/* 8. Minimal Serif */
+.tpl-minimal-serif {
+  padding: 44px 48px;
+  font-family: "Garamond", "Georgia", serif;
+}
+.tpl-minimal-serif .rd-header {
+  border-bottom: 1px solid #000;
+  padding-bottom: 10px;
+  margin-bottom: 18px;
+}
+.tpl-minimal-serif .rd-section {
+  margin-bottom: 16px;
+}
+.tpl-minimal-serif .rd-section-title {
+  font-weight: 700;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 3px;
+  margin-bottom: 8px;
+}
+
+/* 9. Timeline */
+.tpl-timeline {
+  padding: 40px 44px;
+}
+.tpl-timeline .rd-header {
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+.tpl-timeline .timeline-container {
+  border-left: 2px solid var(--accent);
+  padding-left: 18px;
+  margin-left: 4px;
+}
+.tpl-timeline .timeline-item {
+  position: relative;
+  margin-bottom: 18px;
+}
+.tpl-timeline .timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -24px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* 10. Creative */
+.tpl-creative {
+  padding: 40px 44px;
+}
+.tpl-creative .rd-header {
+  background: color-mix(in srgb, var(--accent) 10%, #fff);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, #fff);
+}
+.tpl-creative .rd-name {
+  color: var(--accent);
+}
+.tpl-creative .rd-section-title {
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.tpl-creative .rd-skill {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+
+/* 11. Academic */
+.tpl-academic {
+  padding: 44px 48px;
+  font-family: "Times New Roman", Times, serif;
+}
+.tpl-academic .rd-header {
+  text-align: center;
+  border-bottom: 1px double #000;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+.tpl-academic .rd-contact {
+  justify-content: center;
+}
+.tpl-academic .rd-section {
+  margin-bottom: 18px;
+}
+.tpl-academic .rd-section-title {
+  border-bottom: 1px solid #000;
+  margin-bottom: 10px;
+}
+
+/* 12. Bold */
+.tpl-bold {
+  padding: 40px 44px;
+}
+.tpl-bold .rd-header {
+  border-left: 8px solid var(--accent);
+  padding-left: 18px;
+  margin-bottom: 22px;
+}
+.tpl-bold .rd-name {
+  font-size: 30px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+.tpl-bold .rd-section-title {
+  background: #0f172a;
+  color: #ffffff;
+  padding: 4px 10px;
+  margin-bottom: 12px;
+}
+
+/* 13. Clean Grid */
+.tpl-clean-grid {
+  padding: 40px 44px;
+}
+.tpl-clean-grid .rd-header {
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+}
+.tpl-clean-grid .rd-section-title {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 3px;
+  margin-bottom: 10px;
+}
+
+/* 14. Slate */
+.tpl-slate {
+  padding: 40px 44px;
+  background: #f8fafc;
+}
+.tpl-slate .rd-header {
+  border-bottom: 3px solid #475569;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+}
+.tpl-slate .rd-section-title {
+  color: #334155;
+  border-bottom: 2px solid #94a3b8;
+  padding-bottom: 3px;
+  margin-bottom: 10px;
+}
+
+/* 15. Startup */
+.tpl-startup {
+  padding: 40px 44px;
+}
+.tpl-startup .rd-header {
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+}
+.tpl-startup .rd-name {
+  color: var(--accent);
+}
+.tpl-startup .rd-section-title {
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.tpl-startup .rd-skill {
+  background: color-mix(in srgb, var(--accent) 15%, #fff);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* 16. Swiss */
+.tpl-swiss {
+  padding: 44px 48px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.tpl-swiss .rd-name {
+  font-size: 32px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+}
+.tpl-swiss .rd-header {
+  border-bottom: 4px solid #000000;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+.tpl-swiss .rd-section-title {
+  font-weight: 900;
+  color: #000000;
+  border-bottom: 2px solid #000000;
+  padding-bottom: 3px;
+  margin-bottom: 10px;
+}
+
+/* ============ Print / PDF export ============ */
 @media print {
   @page {
     margin: 0;
