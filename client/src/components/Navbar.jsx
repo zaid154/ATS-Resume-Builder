@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FileText, LogOut, LayoutDashboard, Target, Sparkles, Sun, Moon, ShieldCheck, Eye, EyeOff } from "lucide-react";
+import { LogOut, LayoutDashboard, Target, Sun, Moon, ShieldCheck, ArrowUpRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useState, useEffect } from "react";
 
@@ -54,33 +54,70 @@ export default function Navbar() {
         .join("")
         .toUpperCase()
         .slice(0, 2)
-    : "U";
+    : "MZ";
 
   return (
-    <header className="navbar">
-      <div className="navbar-inner">
-        <Link to={user ? "/dashboard" : "/"} className="brand">
-          <span className="brand-mark">
-            <FileText size={18} />
-          </span>
-          <span>
-            ATS<span className="brand-accent">Resume</span>
-          </span>
+    <header className="area-header-wrapper">
+      <div className="area-header">
+        <Link to={user ? "/dashboard" : "/"} className="area-logo">
+          ATS<span style={{ color: "var(--primary)" }}>Resume</span>
         </Link>
 
-        <nav className="nav-links" style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        {/* Center Floating Navigation */}
+        <nav className="area-nav-pill">
+          {user ? (
+            <>
+              <Link
+                to="/dashboard"
+                className={`area-nav-link ${isActive("/dashboard") ? "active" : ""}`}
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/analyze"
+                className={`area-nav-link ${isActive("/analyze") ? "active" : ""}`}
+              >
+                ATS Analyzer
+              </Link>
+              <a href="/#templates" className="area-nav-link">
+                Templates
+              </a>
+              <a href="/#how-to" className="area-nav-link">
+                Guide
+              </a>
+            </>
+          ) : (
+            <>
+              <a href="/#benefits" className="area-nav-link">
+                Features
+              </a>
+              <a href="/#templates" className="area-nav-link">
+                Templates
+              </a>
+              <a href="/#scoring" className="area-nav-link">
+                ATS Scoring
+              </a>
+              <a href="/#how-to" className="area-nav-link">
+                How-to
+              </a>
+            </>
+          )}
+        </nav>
+
+        {/* Right Action Area */}
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           {/* Theme toggle */}
           {allowThemeToggle && (
             <button
               className="icon-btn"
               onClick={toggleTheme}
-              title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              title={theme === "dark" ? "Light Mode" : "Dark Mode"}
               style={{
-                borderRadius: "50%",
                 width: 36,
                 height: 36,
+                borderRadius: "50%",
                 border: "1px solid var(--border-light)",
-                background: "var(--bg-subtle)",
+                background: "var(--bg-surface)",
                 color: "var(--text-heading)",
                 cursor: "pointer",
                 display: "flex",
@@ -89,95 +126,113 @@ export default function Navbar() {
                 transition: "all 0.2s ease",
               }}
             >
-              {theme === "dark" ? <Sun size={18} color="#f59e0b" /> : <Moon size={18} color="#64748b" />}
+              {theme === "dark" ? <Sun size={16} color="#d4af37" /> : <Moon size={16} color="var(--primary)" />}
             </button>
           )}
 
-
           {user ? (
-            <>
-              <Link
-                to="/dashboard"
-                className={`nav-link ${isActive("/dashboard") ? "active" : ""}`}
-              >
-                <LayoutDashboard size={16} />
-                <span>Dashboard</span>
-              </Link>
-
-              <Link
-                to="/analyze"
-                className={`nav-link ${isActive("/analyze") ? "active" : ""}`}
-              >
-                <Target size={16} />
-                <span>Analyzer</span>
-              </Link>
-
-              <div 
-                className="nav-user-chip" 
-                title={user.email}
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                style={{ position: "relative", cursor: "pointer" }}
-              >
-                <span className="avatar-dot">{userInitials}</span>
-                <span className="user-name">{user.name}</span>
-                
-                {dropdownOpen && (
-                  <div 
-                    className="user-dropdown-menu"
-                    style={{
-                      position: "absolute",
-                      top: "100%",
-                      right: 0,
-                      marginTop: "8px",
-                      background: "var(--bg-surface)",
-                      border: "1px solid var(--border-light)",
-                      borderRadius: "8px",
-                      boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
-                      minWidth: "160px",
-                      zIndex: 100,
-                      padding: "8px",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "4px"
-                    }}
+            <div 
+              className="nav-user-chip" 
+              title={user.email}
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              style={{
+                position: "relative",
+                cursor: "pointer",
+                borderRadius: "9999px",
+                padding: "5px 14px 5px 6px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                background: "var(--bg-surface)",
+                border: "1px solid var(--border-light)"
+              }}
+            >
+              <span className="avatar-dot" style={{ borderRadius: "50%", background: "var(--primary)", width: 28, height: 28, display: "grid", placeItems: "center", color: "#fff", fontSize: "0.75rem", fontWeight: 700 }}>
+                {userInitials}
+              </span>
+              <span className="user-name" style={{ fontWeight: 600, fontSize: "0.88rem" }}>{user.name}</span>
+              
+              {dropdownOpen && (
+                <div 
+                  className="user-dropdown-menu"
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    right: 0,
+                    marginTop: "10px",
+                    background: "#FFFFFF",
+                    border: "1px solid var(--border-light)",
+                    borderRadius: "14px",
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+                    minWidth: "180px",
+                    zIndex: 100,
+                    padding: "8px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "4px"
+                  }}
+                >
+                  <Link
+                    to="/dashboard"
+                    className="nav-link"
+                    style={{ padding: "8px 12px", width: "100%", fontSize: "0.85rem", borderRadius: "8px" }}
+                    onClick={() => setDropdownOpen(false)}
                   >
-                    {isAdmin && (
-                      <Link
-                        to="/admin"
-                        className="nav-link"
-                        style={{ padding: "8px 12px", borderRadius: "6px", width: "100%" }}
-                        onClick={() => setDropdownOpen(false)}
-                      >
-                        <ShieldCheck size={16} />
-                        <span>Admin Panel</span>
-                      </Link>
-                    )}
-                    <button 
-                      className="btn btn-ghost btn-sm" 
-                      onClick={() => { handleLogout(); setDropdownOpen(false); }}
-                      style={{ padding: "8px 12px", width: "100%", justifyContent: "flex-start", color: "var(--danger)" }}
+                    <LayoutDashboard size={15} />
+                    <span>Dashboard</span>
+                  </Link>
+                  <Link
+                    to="/analyze"
+                    className="nav-link"
+                    style={{ padding: "8px 12px", width: "100%", fontSize: "0.85rem", borderRadius: "8px" }}
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <Target size={15} />
+                    <span>ATS Analyzer</span>
+                  </Link>
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      className="nav-link"
+                      style={{ padding: "8px 12px", width: "100%", fontSize: "0.85rem", borderRadius: "8px" }}
+                      onClick={() => setDropdownOpen(false)}
                     >
-                      <LogOut size={15} />
-                      <span>Logout</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </>
+                      <ShieldCheck size={15} />
+                      <span>Admin Panel</span>
+                    </Link>
+                  )}
+                  <button 
+                    className="btn btn-ghost btn-sm" 
+                    onClick={() => { handleLogout(); setDropdownOpen(false); }}
+                    style={{ padding: "8px 12px", width: "100%", justifyContent: "flex-start", color: "var(--danger)", border: "none", fontSize: "0.85rem", borderRadius: "8px" }}
+                  >
+                    <LogOut size={15} />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
-            <>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <Link
                 to="/login"
-                className={`nav-link ${isActive("/login") ? "active" : ""}`}
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.88rem",
+                  fontWeight: 600,
+                  color: "var(--text-heading)",
+                  padding: "8px 14px",
+                  textDecoration: "none"
+                }}
               >
-                Login
+                Sign In
               </Link>
-              <Link to="/register" className="btn btn-primary btn-sm">
-                Get started <Sparkles size={14} />
+              <Link to="/register" className="btn-area-cta">
+                Create Resume <ArrowUpRight size={14} />
               </Link>
-            </>
+            </div>
           )}
-        </nav>
+        </div>
       </div>
     </header>
   );

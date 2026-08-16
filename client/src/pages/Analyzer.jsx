@@ -78,33 +78,48 @@ export default function Analyzer() {
 
   return (
     <div className="container">
-      <div className="page-head">
-        <div>
-          <h1>ATS Analyzer</h1>
-          <p>Score a resume against a job description and get keyword suggestions.</p>
+      {/* Luxury Header */}
+      <div className="dash-header-section" style={{ marginBottom: "32px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "16px" }}>
+          <div>
+            <span className="area-eyebrow" style={{ marginBottom: "8px" }}>
+              <Target size={13} color="#2D5016" /> ATS Screener Diagnostics & Job Match
+            </span>
+            <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "2.3rem", fontWeight: 400, margin: "0 0 6px", color: "var(--text-heading)" }}>
+              ATS Resume Analyzer
+            </h1>
+            <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "0.95rem" }}>
+              Score your resume against real job descriptions to identify missing keywords and formatting gaps.
+            </p>
+          </div>
+          <button
+            className="btn btn-ghost"
+            style={{ borderRadius: "9999px", padding: "10px 20px", border: "1px solid var(--border-light)", background: "#FFFFFF" }}
+            onClick={() => navigate("/dashboard")}
+          >
+            <ArrowLeft size={16} /> Dashboard
+          </button>
         </div>
-        <button className="btn btn-ghost" onClick={() => navigate("/dashboard")}>
-          <ArrowLeft size={16} /> Dashboard
-        </button>
       </div>
 
       {resumes.length === 0 ? (
-        <div className="empty">
-          <Target size={44} />
-          <h3>No resume to analyze</h3>
-          <p>Create a resume first, then come back to score it.</p>
-          <Link to="/dashboard" className="btn btn-primary" style={{ marginTop: 14 }}>
-            Go to dashboard
+        <div className="empty-card" style={{ padding: "64px 32px", background: "#FFFFFF", borderRadius: "20px", textAlign: "center", border: "1px dashed var(--border-light)" }}>
+          <Target size={44} style={{ color: "var(--primary)", margin: "0 auto 16px" }} />
+          <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.6rem", fontWeight: 400, margin: "0 0 8px", color: "var(--text-heading)" }}>No Resume to Analyze</h3>
+          <p style={{ maxWidth: "440px", margin: "0 auto 24px", color: "var(--text-muted)", fontSize: "0.95rem" }}>Create a resume first in your workspace, then come back to score it against target job descriptions.</p>
+          <Link to="/dashboard" className="btn-area-cta" style={{ padding: "12px 28px", fontSize: "0.9rem" }}>
+            Go to Workspace
           </Link>
         </div>
       ) : (
         <div className="analyzer-grid">
-          {/* Input */}
-          <div className="card card-pad">
+          {/* Input Card */}
+          <div className="card card-pad" style={{ background: "#FFFFFF", border: "1px solid var(--border-light)", borderRadius: "20px", boxShadow: "0 4px 16px rgba(0,0,0,0.03)", padding: "28px" }}>
             <div className="field">
-              <label>Resume</label>
+              <label style={{ fontWeight: 600, color: "var(--text-heading)", marginBottom: 8, fontSize: "0.9rem" }}>Select Resume</label>
               <select
                 className="input"
+                style={{ borderRadius: "12px", background: "var(--bg-subtle)", border: "1px solid var(--border-light)", padding: "10px 14px", fontSize: "0.92rem", fontWeight: 500 }}
                 value={selectedId}
                 onChange={(e) => setSelectedId(e.target.value)}
               >
@@ -116,14 +131,15 @@ export default function Analyzer() {
               </select>
             </div>
 
-            <div className="field">
-              <div className="row" style={{ justifyContent: "space-between", marginBottom: 6 }}>
-                <label style={{ marginBottom: 0 }}>Job description</label>
-                <div className="row" style={{ gap: 4 }}>
+            <div className="field" style={{ marginTop: 20 }}>
+              <div className="row" style={{ justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                <label style={{ marginBottom: 0, fontWeight: 600, color: "var(--text-heading)", fontSize: "0.9rem" }}>Target Job Description</label>
+                <div className="row" style={{ gap: 6 }}>
                   {SAMPLE_JDS.map((s, idx) => (
                     <button
                       key={idx}
                       className="btn btn-ghost btn-sm"
+                      style={{ borderRadius: "9999px", fontSize: "0.75rem", padding: "4px 10px", background: "var(--bg-subtle)", border: "1px solid var(--border-light)" }}
                       onClick={() => setJd(s.text)}
                       type="button"
                     >
@@ -134,32 +150,32 @@ export default function Analyzer() {
               </div>
               <textarea
                 className="textarea"
-                style={{ minHeight: 260, marginTop: 6 }}
+                style={{ minHeight: 240, marginTop: 6, borderRadius: "12px", background: "var(--bg-subtle)", border: "1px solid var(--border-light)", padding: "14px", fontSize: "0.9rem", lineHeight: 1.5 }}
                 value={jd}
                 onChange={(e) => setJd(e.target.value)}
-                placeholder="Paste the full job description here…"
+                placeholder="Paste the full job description here (skills, requirements, responsibilities)…"
               />
-              <p className="field-hint">
-                We extract the most important keywords and check your resume against them.
+              <p className="field-hint" style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: 6 }}>
+                We extract key technical & role terminology and match them against your resume syntax.
               </p>
             </div>
 
-            <button className="btn btn-primary btn-block" onClick={analyze} disabled={loading}>
-              <Target size={18} /> {loading ? "Analyzing…" : "Analyze resume"}
+            <button className="btn-area-cta" style={{ width: "100%", justifyContent: "center", padding: "12px", fontSize: "0.9rem", marginTop: 8 }} onClick={analyze} disabled={loading}>
+              <Target size={18} /> {loading ? "Evaluating Match…" : "Analyze Resume Match"}
             </button>
             {selectedId && (
               <Link
                 to={`/builder/${selectedId}`}
                 className="btn btn-ghost btn-block"
-                style={{ marginTop: 10 }}
+                style={{ marginTop: 10, borderRadius: "9999px", fontSize: "0.85rem", padding: "10px", justifyContent: "center" }}
               >
-                <Pencil size={16} /> Edit this resume
+                <Pencil size={15} /> Edit this Resume in Builder
               </Link>
             )}
           </div>
 
-          {/* Results */}
-          <div className="card card-pad">
+          {/* Results Card */}
+          <div className="card card-pad" style={{ background: "#FFFFFF", border: "1px solid var(--border-light)", borderRadius: "20px", boxShadow: "0 4px 16px rgba(0,0,0,0.03)", padding: "28px" }}>
             {!result ? (
               <div className="empty" style={{ padding: "40px 10px" }}>
                 <Sparkles size={40} />

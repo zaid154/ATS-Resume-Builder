@@ -14,6 +14,7 @@ import {
   Award,
   BarChart3,
   Sparkles,
+  ShieldCheck,
   X,
   Check,
 } from "lucide-react";
@@ -211,38 +212,143 @@ export default function Dashboard() {
 
   return (
     <div className="container">
-      {/* Premium Hero Section */}
-      <div className="dashboard-hero">
-        <div className="dh-top">
-          <div className="dh-title-area">
-            <h1>Welcome back, {user?.name?.split(" ")[0] || "there"}.</h1>
-            <p>Build, score, and manage your ATS-friendly professional resumes.</p>
+      {/* Luxury Editorial Dashboard Header */}
+      <div className="dash-header-section" style={{ marginBottom: "36px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "20px" }}>
+          <div>
+            <span className="area-eyebrow" style={{ marginBottom: "10px" }}>
+              <Sparkles size={13} color="#2D5016" /> Candidate Workspace · {user?.name || "Mohd Zaid"}
+            </span>
+            <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "2.4rem", fontWeight: 400, margin: "0 0 6px", color: "var(--text-heading)", letterSpacing: "-0.02em" }}>
+              Your Resume Portfolio
+            </h1>
+            <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "0.95rem" }}>
+              Manage, edit, and score your ATS-friendly career documents in real time.
+            </p>
           </div>
-          <button className="btn btn-primary btn-lg" onClick={() => setShowTemplateModal(true)} disabled={creating}>
-            <Plus size={18} /> {creating ? "Creating…" : "Create Resume"}
+          <button
+            className="btn-area-cta"
+            onClick={() => setShowTemplateModal(true)}
+            disabled={creating}
+            style={{ padding: "12px 26px", fontSize: "0.9rem" }}
+          >
+            <Plus size={18} /> {creating ? "Creating…" : "Create New Resume"}
           </button>
         </div>
 
-        {/* Stats Summary Row */}
+        {/* Sleek Minimal Stats Bar */}
         {resumes.length > 0 && (
-          <div className="dh-stats">
-            <div className="dh-stat">
-              <div className="dh-stat-val">{stats.count}</div>
-              <div className="dh-stat-lbl">Total Resumes</div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "16px",
+              marginTop: "28px",
+            }}
+          >
+            <div
+              style={{
+                background: "#FFFFFF",
+                border: "1px solid var(--border-light)",
+                borderRadius: "16px",
+                padding: "18px 24px",
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
+              }}
+            >
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: "12px",
+                  background: "var(--bg-subtle)",
+                  display: "grid",
+                  placeItems: "center",
+                  color: "var(--primary)",
+                }}
+              >
+                <FileText size={22} />
+              </div>
+              <div>
+                <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text-heading)", lineHeight: 1.1 }}>
+                  {stats.count}
+                </div>
+                <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 500, marginTop: "4px" }}>
+                  Active Resumes
+                </div>
+              </div>
             </div>
 
-            <div className="dh-stat">
-              <div className="dh-stat-val" style={{ color: "var(--primary)" }}>
-                {stats.avgScore != null ? `${stats.avgScore}%` : "—"}
+            <div
+              style={{
+                background: "#FFFFFF",
+                border: "1px solid var(--border-light)",
+                borderRadius: "16px",
+                padding: "18px 24px",
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
+              }}
+            >
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: "12px",
+                  background: "#EBF5EA",
+                  display: "grid",
+                  placeItems: "center",
+                  color: "#2D5016",
+                }}
+              >
+                <ShieldCheck size={22} />
               </div>
-              <div className="dh-stat-lbl">Average Score</div>
+              <div>
+                <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#2D5016", lineHeight: 1.1 }}>
+                  {stats.avgScore != null ? `${stats.avgScore}%` : "—"}
+                </div>
+                <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 500, marginTop: "4px" }}>
+                  Average ATS Score
+                </div>
+              </div>
             </div>
 
-            <div className="dh-stat">
-              <div className="dh-stat-val" style={{ color: "var(--success)" }}>
-                {stats.maxScore != null ? `${stats.maxScore}%` : "—"}
+            <div
+              style={{
+                background: "#FFFFFF",
+                border: "1px solid var(--border-light)",
+                borderRadius: "16px",
+                padding: "18px 24px",
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
+              }}
+            >
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: "12px",
+                  background: "#FEF7E6",
+                  display: "grid",
+                  placeItems: "center",
+                  color: "#B45309",
+                }}
+              >
+                <Target size={22} />
               </div>
-              <div className="dh-stat-lbl">Highest Score</div>
+              <div>
+                <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#B45309", lineHeight: 1.1 }}>
+                  {stats.maxScore != null ? `${stats.maxScore}%` : "—"}
+                </div>
+                <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 500, marginTop: "4px" }}>
+                  Highest Screener Score
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -250,11 +356,19 @@ export default function Dashboard() {
 
       {/* Search Input */}
       {resumes.length > 0 && (
-        <div className="search-wrap">
-          <Search size={16} className="search-icon" />
+        <div className="search-wrap" style={{ marginBottom: "28px" }}>
+          <Search size={18} className="search-icon" style={{ color: "var(--text-muted)" }} />
           <input
             className="input search-input"
-            placeholder="Search resumes by title, candidate name, or role…"
+            style={{
+              borderRadius: "9999px",
+              background: "#FFFFFF",
+              border: "1px solid var(--border-light)",
+              padding: "12px 20px 12px 46px",
+              fontSize: "0.92rem",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
+            }}
+            placeholder="Search resumes by title, candidate name, or target role…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -266,94 +380,129 @@ export default function Dashboard() {
           <div className="spinner" />
         </div>
       ) : resumes.length === 0 ? (
-        <div className="empty-card">
-          <FileStack size={44} />
-          <h3>No Resumes Yet</h3>
-          <p>Create your first resume to score it against job descriptions and export to PDF.</p>
-          <button className="btn btn-primary btn-lg" onClick={() => setShowTemplateModal(true)} disabled={creating}>
-            <Plus size={18} /> Create Resume
+        <div className="empty-card" style={{ padding: "64px 32px", background: "#FFFFFF", border: "1px dashed var(--border-light)", borderRadius: "20px", textAlign: "center" }}>
+          <FileStack size={44} style={{ color: "var(--primary)", margin: "0 auto 16px" }} />
+          <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.6rem", fontWeight: 400, margin: "0 0 8px", color: "var(--text-heading)" }}>
+            No Resumes in Workspace
+          </h3>
+          <p style={{ maxWidth: "460px", margin: "0 auto 24px", color: "var(--text-muted)", fontSize: "0.95rem", lineHeight: 1.6 }}>
+            Create your first resume to score it against target job descriptions and export print-ready PDFs.
+          </p>
+          <button className="btn-area-cta" onClick={() => setShowTemplateModal(true)} disabled={creating} style={{ padding: "12px 28px", fontSize: "0.9rem" }}>
+            <Plus size={18} /> Create Your First Resume
           </button>
-
         </div>
       ) : filteredResumes.length === 0 ? (
-        <div className="empty-card" style={{ padding: "40px 20px" }}>
-          <Search size={36} />
-          <h3>No matching resumes found</h3>
-          <p>No resume matches "{search}". Try searching another keyword.</p>
+        <div className="empty-card" style={{ padding: "48px 24px", background: "#FFFFFF", borderRadius: "20px", textAlign: "center", border: "1px solid var(--border-light)" }}>
+          <Search size={32} style={{ color: "var(--text-muted)", margin: "0 auto 12px" }} />
+          <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.4rem", fontWeight: 400, margin: "0 0 6px" }}>No matching resumes found</h3>
+          <p style={{ color: "var(--text-muted)", margin: 0 }}>No resume matches "{search}". Try searching another keyword.</p>
         </div>
       ) : (
-        <div className="resume-grid">
+        <div className="resume-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "24px" }}>
           {filteredResumes.map((r, i) => {
             const displayScore = r.lastScore ?? computeLiveScore(r).score;
+            const isExcellent = displayScore >= 85;
+            const isGood = displayScore >= 70;
             return (
               <motion.div
                 key={r._id}
-                className="resume-card"
+                style={{
+                  background: "#FFFFFF",
+                  border: "1px solid var(--border-light)",
+                  borderRadius: "20px",
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  transition: "all 0.25s ease",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.03)",
+                }}
+                whileHover={{ y: -4, boxShadow: "0 12px 32px rgba(0,0,0,0.08)", borderColor: "var(--primary)" }}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25, delay: i * 0.03 }}
               >
-                <div className="rc-content">
-                  <div className="rc-header">
-                    <h3 className="rc-title">{r.title}</h3>
-                    <div className="rc-meta">
-                      <span>{r.personal?.fullName || "Unnamed Candidate"}</span>
-                      {r.personal?.jobTitle && (
-                        <>
-                          <span className="dot-sep" />
-                          <span>{r.personal.jobTitle}</span>
-                        </>
-                      )}
+                {/* Card Top Banner / Metadata */}
+                <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border-light)", display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--bg-subtle)" }}>
+                  <span style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "capitalize", color: "var(--primary)", background: "#FFFFFF", padding: "3px 10px", borderRadius: "9999px", border: "1px solid var(--border-light)" }}>
+                    📄 {r.template || "Modern Clean"}
+                  </span>
+                  <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+                    {new Date(r.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </span>
+                </div>
+
+                {/* Card Body */}
+                <div style={{ padding: "20px 20px", flex: 1, display: "flex", flexDirection: "column", gap: "14px" }}>
+                  <div>
+                    <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.25rem", fontWeight: 600, color: "var(--text-heading)", margin: "0 0 6px", lineHeight: 1.3 }}>
+                      {r.title}
+                    </h3>
+                    <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span style={{ fontWeight: 600, color: "var(--text-body)" }}>{r.personal?.fullName || "Candidate"}</span>
+                      {r.personal?.jobTitle && <span>• {r.personal.jobTitle}</span>}
                     </div>
                   </div>
-                  
-                  <div className="rc-details">
-                    <div className="rc-score" style={{ color: scoreColor(displayScore) }}>
-                      <span className="score-val">{displayScore}</span>
-                      <span className="score-lbl">Score</span>
-                    </div>
-                    
-                    <div className="rc-details-right">
-                      <div className="rc-template">
-                        <FileText size={13} style={{ display: 'inline', marginBottom: '-2px' }}/> <span style={{textTransform: 'capitalize'}}>{r.template}</span>
+
+                  {/* Live Score Pill Box */}
+                  <div style={{
+                    background: isExcellent ? "#EBF5EA" : isGood ? "#FEF7E6" : "#FDF2F2",
+                    border: `1px solid ${isExcellent ? "#D2E7C8" : isGood ? "#F5DEB3" : "#F5C6C7"}`,
+                    borderRadius: "12px",
+                    padding: "10px 14px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginTop: "auto",
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <div style={{ fontSize: "1.2rem", fontWeight: 800, color: isExcellent ? "#2D5016" : isGood ? "#B45309" : "#9E2A2B" }}>
+                        {displayScore}%
                       </div>
-                      <div className="rc-date">
-                        Updated {new Date(r.updatedAt).toLocaleDateString()}
+                      <div style={{ fontSize: "0.78rem", fontWeight: 600, color: isExcellent ? "#2D5016" : isGood ? "#B45309" : "#9E2A2B" }}>
+                        {isExcellent ? "Excellent ATS Match" : isGood ? "Good Potential" : "Needs Optimization"}
                       </div>
                     </div>
+                    <span style={{ fontSize: "0.7rem", color: "var(--text-muted)", fontWeight: 500 }}>Live Score</span>
                   </div>
                 </div>
 
-                <div className="rc-footer">
+                {/* Card Footer Actions */}
+                <div style={{ padding: "12px 18px", borderTop: "1px solid var(--border-light)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", background: "#FFFFFF" }}>
                   <button
-                    className="rc-btn-primary"
+                    className="btn-area-cta"
+                    style={{ flex: 1, padding: "8px 14px", fontSize: "0.82rem", justifyContent: "center" }}
                     onClick={() => navigate(`/builder/${r._id}`)}
                   >
-                    <Pencil size={15} /> Edit Resume
+                    <Pencil size={14} /> Edit Resume
                   </button>
-                  <div className="rc-actions-right">
-                    <button
-                      className="rc-icon-btn"
-                      onClick={() => navigate(`/analyze/${r._id}`)}
-                      title="Analyze"
-                    >
-                      <Target size={16} />
-                    </button>
-                    <button
-                      className="rc-icon-btn"
-                      onClick={() => duplicate(r._id)}
-                      title="Duplicate"
-                    >
-                      <Copy size={16} />
-                    </button>
-                    <button
-                      className="rc-icon-btn danger"
-                      onClick={() => remove(r._id, r.title)}
-                      title="Delete"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
+
+                  <button
+                    className="icon-btn"
+                    style={{ width: 34, height: 34, borderRadius: "50%", border: "1px solid var(--border-light)", background: "var(--bg-subtle)", display: "grid", placeItems: "center", cursor: "pointer" }}
+                    onClick={() => navigate(`/analyze/${r._id}`)}
+                    title="Analyze Job Match"
+                  >
+                    <Target size={15} color="var(--primary)" />
+                  </button>
+
+                  <button
+                    className="icon-btn"
+                    style={{ width: 34, height: 34, borderRadius: "50%", border: "1px solid var(--border-light)", background: "var(--bg-subtle)", display: "grid", placeItems: "center", cursor: "pointer" }}
+                    onClick={() => duplicate(r._id)}
+                    title="Duplicate Resume"
+                  >
+                    <Copy size={14} color="var(--text-body)" />
+                  </button>
+
+                  <button
+                    className="icon-btn"
+                    style={{ width: 34, height: 34, borderRadius: "50%", border: "1px solid var(--border-light)", background: "var(--bg-subtle)", display: "grid", placeItems: "center", cursor: "pointer" }}
+                    onClick={() => remove(r._id, r.title)}
+                    title="Delete Resume"
+                  >
+                    <Trash2 size={14} color="var(--danger)" />
+                  </button>
                 </div>
               </motion.div>
             );
@@ -366,17 +515,17 @@ export default function Dashboard() {
         <div className="preset-modal-backdrop" onClick={() => setShowTemplateModal(false)}>
           <div
             className="preset-modal"
-            style={{ maxWidth: 1120, width: "95%", padding: 24, maxHeight: "90vh", borderRadius: 16 }}
+            style={{ maxWidth: 1120, width: "95%", padding: 24, maxHeight: "90vh", borderRadius: 'var(--radius-lg)' }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+            <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
               <div>
-                <h3 style={{ fontSize: "1.3rem", fontWeight: 800, margin: 0, color: "var(--text-heading)" }}>
+                <h3 style={{ fontFamily: "var(--font-sans)", fontSize: "1.4rem", fontWeight: 700, margin: 0, color: "var(--text-heading)" }}>
                   Choose a Resume Template
                 </h3>
                 <p style={{ margin: "4px 0 0", fontSize: "0.88rem", color: "var(--text-muted)" }}>
-                  Pick from 16 clean layouts — all designed to work well with ATS parsers.
+                  Pick from 16 ATS-optimized designs built for recruiters and automated screeners.
                 </p>
               </div>
               <button className="icon-btn" onClick={() => setShowTemplateModal(false)}>
@@ -390,8 +539,8 @@ export default function Dashboard() {
                 display: "flex",
                 gap: 8,
                 overflowX: "auto",
-                paddingBottom: 10,
-                marginBottom: 16,
+                paddingBottom: 12,
+                marginBottom: 20,
                 borderBottom: "1px solid var(--border-light)",
               }}
             >
@@ -400,15 +549,15 @@ export default function Dashboard() {
                   key={cat}
                   onClick={() => setTemplateCategory(cat)}
                   style={{
-                    padding: "6px 14px",
-                    borderRadius: 20,
+                    padding: "6px 16px",
+                    borderRadius: "9999px",
                     fontSize: "0.82rem",
                     fontWeight: 600,
-                    border: templateCategory === cat ? "1.5px solid var(--primary)" : "1px solid var(--border-light)",
-                    background: templateCategory === cat ? "var(--primary)" : "#ffffff",
+                    border: templateCategory === cat ? "1px solid var(--primary)" : "1px solid var(--border-light)",
+                    background: templateCategory === cat ? "var(--primary)" : "transparent",
                     color: templateCategory === cat ? "#ffffff" : "var(--text-body)",
                     cursor: "pointer",
-                    transition: "all 0.15s ease",
+                    transition: "all 0.2s ease",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -422,7 +571,7 @@ export default function Dashboard() {
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 18,
+                gap: 20,
                 maxHeight: "60vh",
                 overflowY: "auto",
                 paddingRight: 6,
@@ -439,15 +588,15 @@ export default function Dashboard() {
                     key={t.id}
                     onClick={() => setSelectedTemplate(t.id)}
                     style={{
-                      background: "#ffffff",
-                      borderRadius: 12,
+                      background: "#FFFFFF",
+                      borderRadius: "12px",
                       border: isSelected ? "2px solid var(--primary)" : "1px solid var(--border-light)",
                       overflow: "hidden",
                       cursor: "pointer",
                       transition: "all 0.2s ease",
                       boxShadow: isSelected
-                        ? "0 8px 24px rgba(37,99,235,0.22)"
-                        : "0 2px 8px rgba(0,0,0,0.05)",
+                        ? "0 6px 20px rgba(43, 58, 36, 0.15)"
+                        : "0 2px 8px rgba(0,0,0,0.03)",
                       display: "flex",
                       flexDirection: "column",
                       position: "relative",
@@ -457,7 +606,7 @@ export default function Dashboard() {
                     <div
                       style={{
                         height: 200,
-                        background: "#f1f5f9",
+                        background: "var(--bg-subtle)",
                         overflow: "hidden",
                         position: "relative",
                         display: "flex",
@@ -476,15 +625,14 @@ export default function Dashboard() {
                           zIndex: 10,
                           fontSize: "0.68rem",
                           fontWeight: 700,
-                          background: "rgba(255,255,255,0.92)",
-                          backdropFilter: "blur(4px)",
+                          background: "#FFFFFF",
                           padding: "3px 8px",
-                          borderRadius: 12,
+                          borderRadius: "4px",
                           color: "var(--primary)",
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+                          border: "1px solid var(--border-light)",
                         }}
                       >
-                        {t.badge || "ATS Friendly"}
+                        {t.badge || "ATS Ready"}
                       </span>
 
                       {isSelected && (
@@ -498,7 +646,7 @@ export default function Dashboard() {
                             color: "#ffffff",
                             borderRadius: "50%",
                             padding: 4,
-                            boxShadow: "0 2px 6px rgba(37,99,235,0.4)",
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -516,8 +664,8 @@ export default function Dashboard() {
                           transform: "scale(0.24)",
                           transformOrigin: "top center",
                           background: "#ffffff",
-                          boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-                          borderRadius: 4,
+                          boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
+                          borderRadius: 2,
                           pointerEvents: "none",
                           userSelect: "none",
                         }}
@@ -528,23 +676,23 @@ export default function Dashboard() {
 
                     {/* Bottom Info Section */}
                     <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
-                      <h4 style={{ margin: 0, fontSize: "1rem", fontWeight: 700, color: "var(--text-heading)" }}>
+                      <h4 style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "1rem", fontWeight: 700, color: "var(--text-heading)" }}>
                         {t.name}
                       </h4>
-                      <p style={{ margin: 0, fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.35, flex: 1 }}>
+                      <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--text-muted)", lineHeight: 1.4, flex: 1 }}>
                         {t.desc}
                       </p>
 
                       <button
-                        className={isSelected ? "btn btn-primary btn-sm" : "btn btn-outline btn-sm"}
-                        style={{ marginTop: 10, width: "100%", justifyContent: "center" }}
+                        className="btn-area-cta"
+                        style={{ marginTop: 10, width: "100%", justifyContent: "center", padding: "8px 12px", fontSize: "0.8rem" }}
                         onClick={(e) => {
                           e.stopPropagation();
                           setShowTemplateModal(false);
                           createResume({ ...BLANK, template: t.id });
                         }}
                       >
-                        {creating ? "Creating..." : `Use ${t.name} ✨`}
+                        {creating ? "Creating..." : `Use ${t.name}`}
                       </button>
                     </div>
                   </div>
@@ -558,12 +706,12 @@ export default function Dashboard() {
               style={{
                 justifyContent: "space-between",
                 alignItems: "center",
-                paddingTop: 14,
+                paddingTop: 16,
                 marginTop: 8,
                 borderTop: "1px solid var(--border-light)",
               }}
             >
-              <div style={{ fontSize: "0.84rem", color: "var(--text-muted)" }}>
+              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>
                 Selected: <strong style={{ color: "var(--primary)" }}>{TEMPLATES.find((t) => t.id === selectedTemplate)?.name}</strong>
               </div>
               <div className="row" style={{ gap: 10 }}>
@@ -571,14 +719,15 @@ export default function Dashboard() {
                   Cancel
                 </button>
                 <button
-                  className="btn btn-primary"
+                  className="btn-area-cta"
+                  style={{ padding: "10px 22px", fontSize: "0.85rem" }}
                   onClick={() => {
                     setShowTemplateModal(false);
                     createResume({ ...BLANK, template: selectedTemplate });
                   }}
                   disabled={creating}
                 >
-                  {creating ? "Creating..." : "Continue with Selected ✨"}
+                  {creating ? "Creating..." : "Continue with Selected"}
                 </button>
               </div>
             </div>
