@@ -21,6 +21,7 @@ import api, { apiError } from "../api/client.js";
 import { scoreColor } from "../lib/score.js";
 import { computeLiveScore } from "../lib/liveScore.js";
 import ResumePreview, { TEMPLATES } from "../components/templates/index.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 
 
@@ -127,6 +128,7 @@ const BLANK = {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [resumes, setResumes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -134,8 +136,6 @@ export default function Dashboard() {
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState("modern");
   const [templateCategory, setTemplateCategory] = useState("All");
-
-
 
   const load = async () => {
     try {
@@ -211,52 +211,42 @@ export default function Dashboard() {
 
   return (
     <div className="container">
-      {/* Header */}
-      <div className="page-head">
-        <div>
-          <h1>Resumes</h1>
-          <p>Build, score, and manage your ATS-friendly professional resumes.</p>
+      {/* Premium Hero Section */}
+      <div className="dashboard-hero">
+        <div className="dh-top">
+          <div className="dh-title-area">
+            <h1>Welcome back, {user?.name?.split(" ")[0] || "there"}.</h1>
+            <p>Build, score, and manage your ATS-friendly professional resumes.</p>
+          </div>
+          <button className="btn btn-primary btn-lg" onClick={() => setShowTemplateModal(true)} disabled={creating}>
+            <Plus size={18} /> {creating ? "Creating…" : "Create Resume"}
+          </button>
         </div>
-        <button className="btn btn-primary" onClick={() => setShowTemplateModal(true)} disabled={creating}>
-          <Plus size={18} /> {creating ? "Creating…" : "Create Resume"}
-        </button>
 
+        {/* Stats Summary Row */}
+        {resumes.length > 0 && (
+          <div className="dh-stats">
+            <div className="dh-stat">
+              <div className="dh-stat-val">{stats.count}</div>
+              <div className="dh-stat-lbl">Total Resumes</div>
+            </div>
+
+            <div className="dh-stat">
+              <div className="dh-stat-val" style={{ color: "var(--primary)" }}>
+                {stats.avgScore != null ? `${stats.avgScore}%` : "—"}
+              </div>
+              <div className="dh-stat-lbl">Average Score</div>
+            </div>
+
+            <div className="dh-stat">
+              <div className="dh-stat-val" style={{ color: "var(--success)" }}>
+                {stats.maxScore != null ? `${stats.maxScore}%` : "—"}
+              </div>
+              <div className="dh-stat-lbl">Highest Score</div>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Stats Summary Row */}
-      {resumes.length > 0 && (
-        <div className="stats-row">
-          <div className="stat-card">
-            <div className="stat-icon" style={{ background: "var(--primary-light)", color: "var(--primary)" }}>
-              <FileStack size={20} />
-            </div>
-            <div>
-              <div className="stat-val">{stats.count}</div>
-              <div className="stat-lbl">Total Resumes</div>
-            </div>
-          </div>
-
-          <div className="stat-card">
-            <div className="stat-icon" style={{ background: "var(--success-bg)", color: "var(--success)" }}>
-              <BarChart3 size={20} />
-            </div>
-            <div>
-              <div className="stat-val">{stats.avgScore != null ? `${stats.avgScore}%` : "—"}</div>
-              <div className="stat-lbl">Average ATS Score</div>
-            </div>
-          </div>
-
-          <div className="stat-card">
-            <div className="stat-icon" style={{ background: "#f3e8ff", color: "#7c3aed" }}>
-              <Award size={20} />
-            </div>
-            <div>
-              <div className="stat-val">{stats.maxScore != null ? `${stats.maxScore}%` : "—"}</div>
-              <div className="stat-lbl">Highest Score</div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Search Input */}
       {resumes.length > 0 && (
@@ -303,66 +293,73 @@ export default function Dashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25, delay: i * 0.03 }}
               >
-                <div className="rc-top">
-                  <div>
-                    <h3>{r.title}</h3>
-                    <div className="rc-sub">
-                      {r.personal?.fullName || "Unnamed Candidate"}
-                      {r.personal?.jobTitle ? ` · ${r.personal.jobTitle}` : ""}
+                <div className="rc-content">
+                  <div className="rc-header">
+                    <h3 className="rc-title">{r.title}</h3>
+                    <div className="rc-meta">
+                      <span>{r.personal?.fullName || "Unnamed Candidate"}</span>
+                      {r.personal?.jobTitle && (
+                        <>
+                          <span className="dot-sep" />
+                          <span>{r.personal.jobTitle}</span>
+                        </>
+                      )}
                     </div>
                   </div>
-                  <div
-                    className="score-badge"
-                    style={{ background: scoreColor(displayScore) }}
-                    title="ATS score"
-                  >
-                    {displayScore}
+                  
+                  <div className="rc-details">
+                    <div className="rc-score" style={{ color: scoreColor(displayScore) }}>
+                      <span className="score-val">{displayScore}</span>
+                      <span className="score-lbl">Score</span>
+                    </div>
+                    
+                    <div className="rc-details-right">
+                      <div className="rc-template">
+                        <FileText size={13} style={{ display: 'inline', marginBottom: '-2px' }}/> <span style={{textTransform: 'capitalize'}}>{r.template}</span>
+                      </div>
+                      <div className="rc-date">
+                        Updated {new Date(r.updatedAt).toLocaleDateString()}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-
-              <div className="row" style={{ gap: 8 }}>
-                <span className="chip chip-template">
-                  <FileText size={12} /> {r.template}
-                </span>
-                <span className="rc-sub">
-                  Updated {new Date(r.updatedAt).toLocaleDateString()}
-                </span>
-              </div>
-
-              <div className="rc-actions">
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => navigate(`/builder/${r._id}`)}
-                >
-                  <Pencil size={14} /> Edit
-                </button>
-                <button
-                  className="btn btn-ghost btn-sm"
-                  onClick={() => navigate(`/analyze/${r._id}`)}
-                >
-                  <Target size={14} /> Analyze
-                </button>
-                <button
-                  className="btn btn-ghost btn-sm"
-                  onClick={() => duplicate(r._id)}
-                  title="Duplicate"
-                >
-                  <Copy size={14} />
-                </button>
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => remove(r._id, r.title)}
-                  title="Delete"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-    )}
+                <div className="rc-footer">
+                  <button
+                    className="rc-btn-primary"
+                    onClick={() => navigate(`/builder/${r._id}`)}
+                  >
+                    <Pencil size={15} /> Edit Resume
+                  </button>
+                  <div className="rc-actions-right">
+                    <button
+                      className="rc-icon-btn"
+                      onClick={() => navigate(`/analyze/${r._id}`)}
+                      title="Analyze"
+                    >
+                      <Target size={16} />
+                    </button>
+                    <button
+                      className="rc-icon-btn"
+                      onClick={() => duplicate(r._id)}
+                      title="Duplicate"
+                    >
+                      <Copy size={16} />
+                    </button>
+                    <button
+                      className="rc-icon-btn danger"
+                      onClick={() => remove(r._id, r.title)}
+                      title="Delete"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Clean 3-Column Visual Card Grid Template Chooser Modal */}
       {showTemplateModal && (

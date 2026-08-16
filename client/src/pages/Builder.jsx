@@ -866,7 +866,7 @@ export default function Builder() {
         {/* ---------------- Preview ---------------- */}
         <div className="preview-sticky-panel">
           <div className="preview-controls">
-            <div className="row" style={{ gap: 8 }}>
+            <div className="row" style={{ gap: 12, flexWrap: "wrap" }}>
               <span className="pv-label">
                 <Eye size={14} /> Live Canvas
               </span>
@@ -888,19 +888,19 @@ export default function Builder() {
                   fontSize: "0.72rem",
                   background: "#f0fdf4",
                   border: "1px solid #bbf7d0",
-                  padding: "2px 8px",
+                  padding: "4px 10px",
                   borderRadius: 12,
                   fontWeight: 700,
                   display: "inline-flex",
                   alignItems: "center",
+                  whiteSpace: "nowrap"
                 }}
               >
-                📄 1 Page A4 Standard
+                📄 1 Page A4
               </span>
             </div>
 
-
-            <div className="row" style={{ gap: 4 }}>
+            <div className="row" style={{ gap: 4, flexWrap: "wrap" }}>
               <button
                 className="btn btn-ghost btn-sm"
                 style={{ padding: "3px 7px" }}

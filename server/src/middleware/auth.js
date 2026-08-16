@@ -19,3 +19,14 @@ export async function requireAuth(req, res, next) {
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 }
+
+export function requireAdmin(req, res, next) {
+  if (!req.user) {
+    return res.status(401).json({ message: "Not authenticated" });
+  }
+  const isEmailAdmin = req.user.email && req.user.email.toLowerCase().includes("admin");
+  if (req.user.role !== "admin" && !isEmailAdmin) {
+    return res.status(403).json({ message: "Forbidden: Admin access required" });
+  }
+  next();
+}

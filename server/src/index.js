@@ -21,6 +21,7 @@ import { notFound, errorHandler } from "./middleware/error.js";
 import authRoutes from "./routes/auth.js";
 import resumeRoutes from "./routes/resume.js";
 import atsRoutes from "./routes/ats.js";
+import adminRoutes from "./routes/admin.js";
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.get("/api/health", (req, res) => res.json({ ok: true, service: "ats-resume-a
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/resumes", resumeRoutes);
 app.use("/api/ats", atsRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

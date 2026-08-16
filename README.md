@@ -71,6 +71,11 @@ clean, ATS-friendly PDF.
    | `JWT_SECRET` | any long random string |
    | `JWT_EXPIRES`| `7d` |
    | `CLIENT_URL` | `http://localhost:3000` |
+   | `SMTP_FROM`  | `"ATS-Resume-Builder <your@email.com>"` |
+   | `SMTP_HOST`  | `smtp.gmail.com` |
+   | `SMTP_USER`  | `your@email.com` |
+   | `SMTP_PASS`  | `your_app_password` |
+   | `BREVO_API_KEY` | `your_brevo_api_key` |
 
 3. **Run both apps together:**
 

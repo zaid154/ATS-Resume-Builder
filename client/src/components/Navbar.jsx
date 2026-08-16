@@ -15,6 +15,8 @@ export default function Navbar() {
   const [allowThemeToggle, setAllowThemeToggle] = useState(() => {
     return localStorage.getItem("ats_allow_theme_toggle") !== "false";
   });
+  
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const isAdmin = user?.role === "admin" || (user?.email && user.email.toLowerCase().includes("admin"));
 
@@ -34,14 +36,6 @@ export default function Navbar() {
   const toggleTheme = () => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
-
-  const toggleThemeVisibility = () => {
-    const nextVal = !allowThemeToggle;
-    setAllowThemeToggle(nextVal);
-    localStorage.setItem("ats_allow_theme_toggle", nextVal ? "true" : "false");
-    window.dispatchEvent(new Event("ats_theme_config_change"));
-  };
-
 
   const handleLogout = () => {
     logout();
@@ -75,34 +69,8 @@ export default function Navbar() {
         </Link>
 
         <nav className="nav-links" style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          {/* Admin: show/hide theme toggle */}
-          {isAdmin && (
-            <button
-              onClick={toggleThemeVisibility}
-              title={allowThemeToggle ? "Hide theme toggle for users" : "Show theme toggle for users"}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "4px 10px",
-                borderRadius: 16,
-                fontSize: "0.74rem",
-                fontWeight: 700,
-                border: allowThemeToggle ? "1px solid #3b82f6" : "1px solid #ef4444",
-                background: allowThemeToggle ? "rgba(59, 130, 246, 0.1)" : "rgba(239, 68, 68, 0.1)",
-                color: allowThemeToggle ? "#3b82f6" : "#ef4444",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              <ShieldCheck size={13} />
-              <span>Theme Switcher: {allowThemeToggle ? "Visible" : "Hidden"}</span>
-              {allowThemeToggle ? <Eye size={13} /> : <EyeOff size={13} />}
-            </button>
-          )}
-
           {/* Theme toggle */}
-          {(allowThemeToggle || isAdmin) && (
+          {allowThemeToggle && (
             <button
               className="icon-btn"
               onClick={toggleTheme}
@@ -144,15 +112,57 @@ export default function Navbar() {
                 <span>Analyzer</span>
               </Link>
 
-              <div className="nav-user-chip" title={user.email}>
+              <div 
+                className="nav-user-chip" 
+                title={user.email}
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                style={{ position: "relative", cursor: "pointer" }}
+              >
                 <span className="avatar-dot">{userInitials}</span>
                 <span className="user-name">{user.name}</span>
+                
+                {dropdownOpen && (
+                  <div 
+                    className="user-dropdown-menu"
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      right: 0,
+                      marginTop: "8px",
+                      background: "var(--bg-surface)",
+                      border: "1px solid var(--border-light)",
+                      borderRadius: "8px",
+                      boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+                      minWidth: "160px",
+                      zIndex: 100,
+                      padding: "8px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "4px"
+                    }}
+                  >
+                    {isAdmin && (
+                      <Link
+                        to="/admin"
+                        className="nav-link"
+                        style={{ padding: "8px 12px", borderRadius: "6px", width: "100%" }}
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        <ShieldCheck size={16} />
+                        <span>Admin Panel</span>
+                      </Link>
+                    )}
+                    <button 
+                      className="btn btn-ghost btn-sm" 
+                      onClick={() => { handleLogout(); setDropdownOpen(false); }}
+                      style={{ padding: "8px 12px", width: "100%", justifyContent: "flex-start", color: "var(--danger)" }}
+                    >
+                      <LogOut size={15} />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                )}
               </div>
-
-              <button className="btn btn-ghost btn-sm" onClick={handleLogout} title="Logout">
-                <LogOut size={15} />
-                <span>Logout</span>
-              </button>
             </>
           ) : (
             <>

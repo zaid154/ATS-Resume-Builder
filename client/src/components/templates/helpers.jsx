@@ -7,7 +7,18 @@ export function dateRange(start, end, current) {
 }
 
 export function contactList(p = {}) {
-  return [p.email, p.phone, p.location, p.website, p.linkedin, p.github].filter(Boolean);
+  const cleanLink = (url) => {
+    if (!url) return null;
+    return url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+  };
+  return [
+    p.email,
+    p.phone,
+    p.location,
+    cleanLink(p.website),
+    cleanLink(p.linkedin),
+    cleanLink(p.github)
+  ].filter(Boolean);
 }
 
 export function hasArr(a) {
