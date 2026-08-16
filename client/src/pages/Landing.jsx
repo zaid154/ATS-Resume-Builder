@@ -29,8 +29,8 @@ const FEATURES = [
   },
   {
     icon: LayoutTemplate,
-    title: "Multiple templates",
-    text: "Switch between Modern, Classic, Minimal and Elegant with one click.",
+    title: "16+ templates",
+    text: "Pick from Modern, Classic, Tech, Startup and more — switch with one click.",
   },
   {
     icon: Download,

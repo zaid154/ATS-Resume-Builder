@@ -13,7 +13,7 @@ clean, ATS-friendly PDF.
 - **ATS score** — a heuristic engine scores your resume 0–100 against any job description:
   keyword match, section coverage, measurable impact, action verbs, contact info and length.
 - **Keyword suggestions** — see the exact matched vs. missing keywords the job asks for.
-- **Multiple templates** — Modern, Classic, Minimal and Elegant, each with an accent-colour picker.
+- **Multiple templates** — 16+ templates (Modern, Classic, Minimal, Elegant, Tech, Startup, and more), each with an accent-colour picker.
 - **PDF export** — one click prints a **text-based** PDF (stays parseable by real ATS software).
 - **Authentication** — email/password with JWT + bcrypt; every resume is tied to your account.
 
@@ -58,10 +58,10 @@ clean, ATS-friendly PDF.
    npm run install:all
    ```
 
-2. **Configure the server** — copy the env file and fill it in:
+2. **Set up environment** — copy the example and fill in your values:
 
    ```bash
-   cp server/.env.example server/.env
+   cp .env.example .env
    ```
 
    | Var          | Example |

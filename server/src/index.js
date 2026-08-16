@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Always load the single root .env file
+// Load .env from project root
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 import express from "express";

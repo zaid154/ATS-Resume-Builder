@@ -1,7 +1,4 @@
-/* ==========================================================================
-   PRODUCTION-GRADE HUMAN-CRAFTED DESIGN SYSTEM
-   Inspired by Linear, Stripe, Vercel & Tailwind UI
-   ========================================================================== */
+/* Design tokens & base styles */
 
 :root {
   /* Typography */
@@ -56,7 +53,7 @@
 }
 
 [data-theme="dark"] {
-  /* Color Palette - Futuristic Deep Space Dark Mode (Inspired by Linear, Vercel & MockMate) */
+  /* Dark mode overrides */
   --bg-page: #0b0f19;
   --bg-surface: #111827;
   --bg-subtle: #1f2937;
@@ -328,6 +325,120 @@ h1, h2, h3, h4, h5, h6 {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ---------- Hero Section (Landing Page) ---------- */
+.hero {
+  padding: 64px 20px 48px;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  margin-bottom: 20px;
+  letter-spacing: -0.01em;
+}
+
+.hero h1 {
+  font-size: 3.25rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--text-heading);
+  margin-bottom: 18px;
+}
+
+.hero h1 .grad {
+  background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero .lead {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 680px;
+  margin: 0 auto 32px;
+}
+
+.hero-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Features Grid (Landing Page) ---------- */
+.features {
+  max-width: 1200px;
+  margin: 0 auto 64px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.feature {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: var(--shadow-xs);
+}
+
+.feature:hover {
+  border-color: var(--primary-border);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.f-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+}
+
+.feature h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 8px;
+}
+
+.feature p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
 
 /* ---------- Cards & Layout ---------- */
 .card {
@@ -1287,7 +1398,7 @@ select.input:focus {
   transform: translateX(2px);
 }
 
-/* ---------- Developer Spotlight Card ---------- */
+/* ---------- Developer Card ---------- */
 .dev-card {
   background: var(--bg-subtle);
   border: 1px solid var(--border-light);

@@ -16,7 +16,7 @@ async function seedDatabase() {
     console.log("🌱 Connecting to MongoDB Atlas for seeding...");
     console.log("URI:", process.env.MONGO_URI);
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("✓ Connected to MongoDB Atlas successfully!");
+    console.log("✓ Connected to MongoDB Atlas");
 
     // Clear existing data
     await User.deleteMany({});
@@ -56,7 +56,7 @@ async function seedDatabase() {
         website: "https://portfolio-zeta-drab-97.vercel.app/",
         linkedin: "https://www.linkedin.com/in/mohd-zaid-794090231/",
         github: "https://github.com/zaid154",
-        summary: "Results-driven Full-Stack Engineer with 4+ years of experience architecting high-scalability web apps using React, Node.js, Express, MongoDB, and Tailwind CSS. Specialized in live ATS scoring algorithms and real-time document rendering.",
+        summary: "Full-Stack Developer with 4+ years building web apps with React, Node.js, Express, and MongoDB. Experienced in ATS scoring systems and document rendering.",
       },
       experience: [
         {
@@ -67,9 +67,9 @@ async function seedDatabase() {
           endDate: "Present",
           current: true,
           bullets: [
-            "Architected and deployed a microservices-based ATS Resume Parsing Suite serving over 50,000 active monthly users.",
-            "Optimized MongoDB query aggregation pipelines, reducing database response latency by 45%.",
-            "Implemented JWT-based authentication and security headers, achieving 100% compliance on security audits.",
+            "Built and shipped a microservices-based resume parsing system used by 50k+ monthly users.",
+            "Improved MongoDB aggregation queries, cutting response times by 45%.",
+            "Added JWT auth and security headers, passing all security audits.",
           ],
         },
         {
@@ -80,8 +80,8 @@ async function seedDatabase() {
           endDate: "2021-12",
           current: false,
           bullets: [
-            "Built responsive React SPA dashboards with real-time analytics utilizing WebSocket connections.",
-            "Designed 16+ reusable high-performance UI templates with custom typography and CSS variable engines.",
+            "Built React dashboards with real-time analytics over WebSockets.",
+            "Created 16+ reusable UI templates with custom typography and CSS variables.",
           ],
         },
       ],
@@ -98,7 +98,7 @@ async function seedDatabase() {
       projects: [
         {
           name: "ATS Resume Builder & Analyzer",
-          description: "Full-stack MERN suite featuring live ATS scoring, 16+ print-friendly templates, and job description match analysis.",
+          description: "MERN app with live ATS scoring, 16+ templates, and job description matching.",
           link: "https://github.com/zaid154/ATS-Resume-Builder",
           tech: ["React", "Node.js", "Express", "MongoDB", "Vite", "TailwindCSS"],
         },
@@ -126,7 +126,7 @@ async function seedDatabase() {
         website: "https://portfolio-zeta-drab-97.vercel.app/",
         linkedin: "https://www.linkedin.com/in/mohd-zaid-794090231/",
         github: "https://github.com/zaid154",
-        summary: "Product Engineer specializing in AI/ML integration, user workflow optimization, and product analytics.",
+        summary: "Product-focused engineer working on AI/ML features, user workflows, and analytics.",
       },
       skills: ["Product Strategy", "System Architecture", "MERN Stack", "A/B Testing", "Agile Leadership"],
       lastScore: 89,
@@ -144,7 +144,7 @@ async function seedDatabase() {
         email: "demo@example.com",
         phone: "+1 (555) 019-2834",
         location: "San Francisco, CA",
-        summary: "Passionate Frontend Developer focused on React ecosystem, clean code, and accessibility.",
+        summary: "Frontend developer working with React, focused on clean code and accessibility.",
       },
       skills: ["React", "HTML5", "CSS3", "JavaScript", "Redux"],
       lastScore: 82,
@@ -156,7 +156,7 @@ async function seedDatabase() {
     console.log(`   - ${demoResume.title} (Score: ${demoResume.lastScore}%)`);
 
     console.log("\n==========================================");
-    console.log("🎉 DATABASE SEEDING COMPLETED SUCCESSFULLY!");
+    console.log("🎉 Seeding done!");
     console.log("==========================================");
     console.log("Logins ready for testing:");
     console.log("1. Admin: zaidm1323@gmail.com / password123");

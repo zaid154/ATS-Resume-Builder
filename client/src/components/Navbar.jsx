@@ -75,11 +75,11 @@ export default function Navbar() {
         </Link>
 
         <nav className="nav-links" style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          {/* Admin Toggle Control */}
+          {/* Admin: show/hide theme toggle */}
           {isAdmin && (
             <button
               onClick={toggleThemeVisibility}
-              title={allowThemeToggle ? "Admin: Click to Hide Theme Switch for users" : "Admin: Click to Show Theme Switch for users"}
+              title={allowThemeToggle ? "Hide theme toggle for users" : "Show theme toggle for users"}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -101,7 +101,7 @@ export default function Navbar() {
             </button>
           )}
 
-          {/* Futuristic Dark Mode / Light Mode Toggle Button (Hidden if Admin hides it for users) */}
+          {/* Theme toggle */}
           {(allowThemeToggle || isAdmin) && (
             <button
               className="icon-btn"
