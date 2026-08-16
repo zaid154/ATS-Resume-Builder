@@ -4,7 +4,7 @@
   /* Typography */
   --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-  /* Color Palette - Clean Professional Light Mode */
+  /* Colors */
   --bg-page: #f8fafc;
   --bg-surface: #ffffff;
   --bg-subtle: #f1f5f9;
@@ -14,7 +14,7 @@
   --border-focus: #3b82f6;
 
 
-  /* Primary Brand Colors - Solid Professional Royal Blue */
+  /* Brand */
   --primary: #2563eb;
   --primary-hover: #1d4ed8;
   --primary-light: #eff6ff;
@@ -39,7 +39,7 @@
   --danger-bg: #fef2f2;
   --danger-border: #fecaca;
 
-  /* Subtle Professional Shadows */
+  /* Shadows */
   --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
@@ -1306,7 +1306,7 @@ select.input:focus {
   font-weight: 600;
 }
 
-/* ---------- Modern Footer ---------- */
+/* ---------- Footer ---------- */
 .app-footer {
   position: relative;
   background: var(--bg-surface);

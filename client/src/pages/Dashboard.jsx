@@ -39,7 +39,7 @@ const BLANK = {
     linkedin: "linkedin.com/in/janedoe",
     github: "github.com/janedoe",
     summary:
-      "Results-driven Senior Software Engineer with 5+ years of experience engineering high-performance microservices, REST/GraphQL APIs, and modern React applications. Proven track record reducing API latency by 45% and leading cross-functional engineering sprints.",
+      "Senior Software Engineer with 5+ years building microservices, REST/GraphQL APIs, and React apps. Reduced API latency by 45% and led engineering sprints.",
   },
   experience: [
     {
@@ -50,10 +50,10 @@ const BLANK = {
       endDate: "Present",
       current: true,
       bullets: [
-        "Architected RESTful microservices processing over 500,000 daily active requests with Node.js and Express.",
+        "Built RESTful microservices handling 500k+ daily requests with Node.js and Express.",
         "Optimized MongoDB database indexing and aggregation pipelines, reducing query execution times by 40%.",
         "Collaborated in an agile team of 8 engineers to ship modern React.js web interfaces and design tokens.",
-        "Spearheaded CI/CD automated pipeline migration via GitHub Actions, accelerating release velocity by 35%.",
+        "Set up CI/CD pipeline with GitHub Actions, speeding up releases by 35%.",
       ],
     },
     {
@@ -64,7 +64,7 @@ const BLANK = {
       endDate: "Dec 2021",
       current: false,
       bullets: [
-        "Engineered real-time collaborative dashboard features using WebSockets, React, and Redis caching.",
+        "Built real-time collaborative dashboard features with WebSockets, React, and Redis.",
         "Automated SaaS subscription billing workflow integrating Stripe API for over 35,000 active users.",
         "Reduced AWS EC2 infrastructure costs by $14,000 annually through container auto-scaling.",
       ],
@@ -379,7 +379,7 @@ export default function Dashboard() {
                   Choose a Resume Template
                 </h3>
                 <p style={{ margin: "4px 0 0", fontSize: "0.88rem", color: "var(--text-muted)" }}>
-                  Select from 16 ATS-optimized designs. All layouts are 100% recruiter & parser friendly!
+                  Pick from 16 clean layouts — all designed to work well with ATS parsers.
                 </p>
               </div>
               <button className="icon-btn" onClick={() => setShowTemplateModal(false)}>

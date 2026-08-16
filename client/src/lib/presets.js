@@ -16,7 +16,7 @@ export const PRESETS = [
         linkedin: "linkedin.com/in/alexrivera-dev",
         github: "github.com/alexrivera",
         summary:
-          "Performance-driven Senior Full-Stack Engineer with 5+ years of experience engineering scalable microservices, high-traffic REST/GraphQL APIs, and modern React applications. Proven track record reducing application latency by 45% and leading cross-functional engineering teams.",
+          "Senior Full-Stack Engineer with 5+ years building microservices, REST/GraphQL APIs, and React apps. Cut application latency by 45% and led engineering teams across multiple products.",
       },
       experience: [
         {
@@ -27,10 +27,10 @@ export const PRESETS = [
           endDate: "Present",
           current: true,
           bullets: [
-            "Architected and deployed microservices architecture handling over 2M daily active API requests using Node.js, Express, and Redis caching.",
-            "Engineered responsive React.js frontend dashboards, improving core web vitals and reducing page load times by 40%.",
-            "Spearheaded migration from monolithic DB to sharded MongoDB cluster, achieving 99.99% uptime and zero data loss.",
-            "Mentored 6 junior developers and established CI/CD automated pipeline via GitHub Actions, accelerating release velocity by 35%.",
+            "Built microservices handling 2M+ daily API requests with Node.js, Express, and Redis.",
+            "Built responsive React dashboards, improving web vitals and cutting page load times by 40%.",
+            "Led migration from monolithic DB to sharded MongoDB cluster with 99.99% uptime.",
+            "Mentored 6 junior devs and set up CI/CD via GitHub Actions, speeding up releases by 35%.",
           ],
         },
         {
@@ -120,7 +120,7 @@ export const PRESETS = [
         linkedin: "linkedin.com/in/elena-rostova",
         github: "github.com/elena-ai",
         summary:
-          "Results-oriented Data Scientist with 6+ years specializing in Predictive Modeling, NLP, Machine Learning pipelines, and Big Data analytics. Successfully built fraud detection algorithms saving enterprise clients $4.2M annually.",
+          "Data Scientist with 6+ years in predictive modeling, NLP, and ML pipelines. Built fraud detection models that saved clients $4.2M/year.",
       },
       experience: [
         {
@@ -197,7 +197,7 @@ export const PRESETS = [
         linkedin: "linkedin.com/in/marcusvance",
         github: "",
         summary:
-          "Strategic Senior Product Manager with 7+ years driving SaaS product lifecycle, customer discovery, A/B testing, and cross-functional agile engineering execution. Scaled product ARR from $2M to $15M in under 3 years.",
+          "Senior Product Manager with 7+ years in SaaS — customer discovery, A/B testing, and working across eng and design. Grew ARR from $2M to $15M in 3 years.",
       },
       experience: [
         {

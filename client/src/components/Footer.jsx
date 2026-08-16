@@ -160,7 +160,7 @@ export default function Footer() {
           <p>© {currentYear} <strong>ATS Resume Builder & Analyzer</strong>. Built by <strong>Mohd Zaid</strong>.</p>
           <div className="footer-bottom-links">
             <span className="row" style={{ gap: 6, alignItems: "center" }}>
-              Crafted with <Heart size={14} style={{ color: "#ef4444", fill: "#ef4444" }} /> by <strong style={{ color: "var(--text-heading)" }}>Mohd Zaid</strong>
+              Made with <Heart size={14} style={{ color: "#ef4444", fill: "#ef4444" }} /> by <strong style={{ color: "var(--text-heading)" }}>Mohd Zaid</strong>
             </span>
           </div>
         </div>

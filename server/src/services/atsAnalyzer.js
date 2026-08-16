@@ -1,13 +1,11 @@
 /**
- * Production-Grade ATS Scoring & Job-Matching Engine
+ * ATS scoring engine
  *
- * Provides accurate, consistent, non-gimmicky ATS evaluations:
- * 1. Terminology Normalization & Synonym Mapping
- * 2. Smart JD Parsing (Required vs. Preferred Skills)
- * 3. Anti-Keyword-Stuffing Set Matching
- * 4. Job Title Relevance Matching
- * 5. Action Verbs & Quantified Impact Diagnostics
- * 6. Section Completeness & Word Density Verification
+ * Scores a resume against a job description using:
+ * - Keyword matching with synonym normalization
+ * - Required vs. preferred skill detection
+ * - Action verb and impact checking
+ * - Section completeness and word count
  */
 
 const STOPWORDS = new Set(
@@ -362,13 +360,13 @@ export function analyzeResume(resume, jobDescription) {
   const strengths = [];
   const weaknesses = [];
 
-  if (keywordScore >= 75) strengths.push("Strong alignment with target technical keywords and domain terminology.");
+  if (keywordScore >= 75) strengths.push("Good keyword match with the job description.");
   else weaknesses.push(`Missing key domain terms (${missing.slice(0, 4).join(", ") || "keywords"}).`);
 
   if (impactScore >= 50) strengths.push("Great use of quantitative metrics, percentages, and performance results.");
   else weaknesses.push("Bullet points lack quantifiable metrics (e.g. %, $, numbers, time saved).");
 
-  if (actionScore >= 60) strengths.push("Strong bullet composition starting with decisive action verbs.");
+  if (actionScore >= 60) strengths.push("Bullet points start with clear action verbs.");
   else weaknesses.push("Several experience bullets start with weak or passive wording.");
 
   if (titleScore >= 75) strengths.push("Job title and experience roles closely match target role requirements.");
@@ -383,7 +381,7 @@ export function analyzeResume(resume, jobDescription) {
   } else if (missing.length > 0) {
     suggestions.push({
       priority: "high",
-      text: `Weave in secondary target keywords: ${missing.slice(0, 6).join(", ")}.`,
+      text: `Try adding these keywords: ${missing.slice(0, 6).join(", ")}.`,
     });
   }
   if (impactScore < 50) {
@@ -395,7 +393,7 @@ export function analyzeResume(resume, jobDescription) {
   if (actionScore < 60) {
     suggestions.push({
       priority: "medium",
-      text: "Start every bullet point with a strong action verb (e.g. Spearheaded, Built, Optimized, Reduced).",
+      text: "Start bullet points with action verbs (e.g. Built, Led, Improved, Reduced).",
     });
   }
   if (contactScore < 100) {

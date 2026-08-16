@@ -58,7 +58,7 @@ export default function Landing() {
             transition={{ duration: 0.5 }}
           >
             <span className="pill">
-              <Sparkles size={14} /> Beat the bots. Land the interview.
+              <Sparkles size={14} /> Score your resume. Get more interviews.
             </span>
             <h1>
               Build a resume that <span className="grad">gets past the ATS</span>

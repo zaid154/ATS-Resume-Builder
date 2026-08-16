@@ -373,7 +373,7 @@ export default function Builder() {
               <Sparkles size={18} style={{ verticalAlign: "-3px", color: "var(--primary)" }} /> Choose a Sample Preset
             </h3>
             <p className="rc-sub">
-              Load a pre-filled, highly ATS-optimized template to quickly test or build your resume.
+              Load a sample resume to quickly test templates or get started.
             </p>
             <div className="preset-list">
               {PRESETS.map((p) => (
