@@ -14,15 +14,7 @@ import ResetPassword from "./pages/ResetPassword.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 
 export default function App() {
-  const { loading, user } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="app-loader">
-        <div className="spinner" />
-      </div>
-    );
-  }
+  const { user } = useAuth();
 
   const isAdmin = user?.role === "admin" || (user?.email && user.email.toLowerCase().includes("admin"));
 
