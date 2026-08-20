@@ -2183,44 +2183,52 @@ select.input:focus {
   color: var(--warning);
 }
 
-/* ---------- Auth Screens ---------- */
+/* ---------- Luxury Responsive Auth Screens ---------- */
 .auth-wrap {
   min-height: calc(100vh - 120px);
-  display: grid;
-  place-items: center;
-  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 3vw, 40px) 16px;
   background: #FFFFFF;
 }
-.auth-card {
+
+.auth-split-wrapper {
   width: 100%;
-  max-width: 420px;
+  max-width: 960px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
   background: #FFFFFF;
+  border-radius: 24px;
   border: 1px solid var(--border-light);
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-  padding: 36px 32px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 }
-.auth-card h1 {
-  font-family: var(--font-sans);
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--text-heading);
-  margin-bottom: 6px;
+
+.auth-form-side {
+  padding: clamp(28px, 4vw, 44px) clamp(20px, 4vw, 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-.auth-sub {
-  color: var(--text-muted);
-  margin-bottom: 22px;
-  font-size: 0.94rem;
+
+.auth-showcase-side {
+  background: linear-gradient(135deg, #182E11 0%, #284917 100%);
+  color: #FFFFFF;
+  padding: clamp(28px, 4vw, 44px) clamp(24px, 4vw, 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.auth-alt {
-  text-align: center;
-  margin-top: 18px;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-.auth-alt a {
-  color: var(--primary);
-  font-weight: 600;
+
+@media (max-width: 820px) {
+  .auth-split-wrapper {
+    grid-template-columns: 1fr;
+    max-width: 460px;
+  }
+  .auth-showcase-side {
+    display: none;
+  }
 }
 
 /* ---------- Luxury Atelier Footer ---------- */

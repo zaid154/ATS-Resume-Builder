@@ -1,7 +1,8 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { LogOut, LayoutDashboard, Target, Sun, Moon, ShieldCheck, ArrowUpRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Logo from "./Logo.jsx";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -17,6 +18,7 @@ export default function Navbar() {
   });
   
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const isAdmin = user?.role === "admin" || (user?.email && user.email.toLowerCase().includes("admin"));
 
@@ -31,6 +33,17 @@ export default function Navbar() {
     };
     window.addEventListener("ats_theme_config_change", syncVisibility);
     return () => window.removeEventListener("ats_theme_config_change", syncVisibility);
+  }, []);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
   }, []);
 
   const toggleTheme = () => {
@@ -59,8 +72,8 @@ export default function Navbar() {
   return (
     <header className="area-header-wrapper">
       <div className="area-header">
-        <Link to={user ? "/dashboard" : "/"} className="area-logo">
-          ATS<span style={{ color: "var(--primary)" }}>Resume</span>
+        <Link to={user ? "/dashboard" : "/"} style={{ textDecoration: "none", display: "inline-flex" }}>
+          <Logo size="md" />
         </Link>
 
         {/* Center Floating Navigation */}

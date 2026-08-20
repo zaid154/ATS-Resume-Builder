@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Logo from "./Logo.jsx";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -7,10 +8,10 @@ export default function Footer() {
     <footer className="area-footer-wrapper">
       <div className="area-footer-inner">
         <div className="area-footer-brand">
-          <Link to="/" className="area-logo" style={{ fontSize: "1.25rem", textDecoration: "none" }}>
-            ATS<span style={{ color: "var(--primary)" }}>Resume</span>
+          <Link to="/" style={{ textDecoration: "none", display: "inline-flex" }}>
+            <Logo size="sm" />
           </Link>
-          <p style={{ margin: "4px 0 0", fontSize: "0.82rem", color: "var(--text-muted)" }}>
+          <p style={{ margin: "6px 0 0", fontSize: "0.82rem", color: "var(--text-muted)" }}>
             Precision ATS Resume Builder & Smart Job Match Scorer
           </p>
         </div>
